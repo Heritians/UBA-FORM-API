@@ -6,3 +6,6 @@
 
 # env files
 .env
+
+# cache files
+__pycache__
