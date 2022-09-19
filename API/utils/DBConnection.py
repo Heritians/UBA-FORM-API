@@ -28,9 +28,9 @@ class Singleton:
         return Singleton.__client            
             
 
-s=Singleton()
-print(s.get_client())
-print(s)            
+# s=Singleton()
+# print(s.get_client())
+# print(s)            
 
 
 
