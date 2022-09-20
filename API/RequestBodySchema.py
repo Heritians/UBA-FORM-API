@@ -54,7 +54,7 @@ class FormData(BaseModel):
         'has_bank_acc': Union[Tuple[bool], List[bool]],
         'is_computer_literate': Union[Tuple[bool], List[bool]],
         'has_SSP': Union[Tuple[bool], List[bool]],
-        'health_prob': Union[Union[Tuple[str], List[str], None]],
+        'health_prob': Union[Union[Tuple[str], List[str]],None],
         'has_MNREGA': Union[Tuple[bool], List[bool]],
         'SHG': Union[Tuple[bool], List[bool]],
         'Occupations': Union[Tuple[str], List[str]],
