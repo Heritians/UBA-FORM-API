@@ -163,9 +163,6 @@ class FormData(BaseModel):
     # source of energy
     source_of_energy: _7_SourceOfEnergy
 
-    # appliance runtime
-    appliance_run:_7_1_ApplianceUsage
-
     # land holding info
     land_holding_info: _8_LandholdingInformationAcres
 
