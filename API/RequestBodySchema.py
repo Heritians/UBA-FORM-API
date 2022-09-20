@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Sequence
 from typing_extensions import TypedDict
 
 
@@ -81,10 +81,10 @@ class _5_GovernmentSchemes(BaseModel):
     kisan_credit_card: int
 
 class _6_WaterSource(BaseModel):
-    piped_water:Union[List[bool,int],Tuple[bool,int]]
-    hand_pump:Union[List[bool,int],Tuple[bool,int]]
-    comm_water:Union[List[bool,int],Tuple[bool,int]]
-    open_well:Union[List[bool,int],Tuple[bool,int]]
+    piped_water:Tuple[bool,int]
+    hand_pump:Tuple[bool,int]
+    comm_water:Tuple[bool,int]
+    open_well:Tuple[bool,int]
     mode_of_water_storage:str
     other_water_source:str 
 
@@ -110,12 +110,12 @@ class _8_LandholdingInformationAcres(BaseModel):
     uncultivable_area:float
 
 class _9_AgriculturalInputs(BaseModel):
-    is_chemical_fertilizer_used:Union[List[bool,int],Tuple[bool,int]]
-    is_chemical_insecticide_used:Union[List[bool,int],Tuple[bool,int]]
-    is_chemical_weedice_used:Union[List[bool,int],Tuple[bool,int]]
-    is_chemical_organic_manuevers:Union[List[bool,int],Tuple[bool,int]]
-    irrigation:Union[List[bool,int],Tuple[bool,int]]
-    irrigation:Union[List[bool,int],Tuple[bool,int]]
+    is_chemical_fertilizer_used:Tuple[bool,int]
+    is_chemical_insecticide_used:Tuple[bool,int]
+    is_chemical_weedice_used:Tuple[bool,int]
+    is_chemical_organic_manuevers:Tuple[bool,int]
+    irrigation:Tuple[bool,int]
+    irrigation:Tuple[bool,int]
 
 class _10_AgriculturalProductsNormalYear(BaseModel):
     crop_name:str

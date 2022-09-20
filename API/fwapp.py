@@ -1,6 +1,6 @@
 from API import app
 from API.utils.DBConnection import DBConnection
-from .RequestBodySchema import FormData, Test
+from .RequestBodySchema import FormData
 
 import json
 
@@ -27,5 +27,5 @@ def api_response_check():
 
 
 @app.post("/api/post_data")
-async def api_post_data(responses: Test):
+def api_post_data(responses: FormData):
     return {'test': 'success'}
