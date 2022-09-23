@@ -39,20 +39,20 @@ class _2_GeneralHouseHoldInformation(BaseModel):
 
 
 class _3_FamilyInformation(BaseModel):
-    name: Union[Tuple[str], List[str]]
-    age: Union[Tuple[int], List[int]]
-    sex: Union[Tuple[str], List[str]]
-    martial_status: Union[Tuple[str], List[str]]
-    education: Union[Tuple[str], List[str]]
-    schooling_status: Union[Tuple[str], List[str]]
-    has_AADHAR: Union[Tuple[bool], List[bool]]
-    has_bank_acc: Union[Tuple[bool], List[bool]]
-    is_computer_literate: Union[Tuple[bool], List[bool]]
-    has_SSP: Union[Tuple[bool], List[bool]]
-    health_prob: Union[Union[Tuple[str], List[str]],None]
-    has_MNREGA: Union[Tuple[bool], List[bool]]
-    SHG: Union[Tuple[bool], List[bool]]
-    occupations: Union[Tuple[str], List[str]]
+    name: str
+    age: int
+    sex: str
+    martial_status: str
+    education: str
+    schooling_status: str
+    has_AADHAR: bool
+    has_bank_acc: bool
+    is_computer_literate: bool
+    has_SSP: bool
+    health_prob: Union[str,None]
+    has_MNREGA: bool
+    SHG: bool
+    occupations: str
 
 
 class _4_MigrationStatusFamily(BaseModel):
@@ -86,12 +86,12 @@ class _6_WaterSource(BaseModel):
     comm_water:Tuple[bool,int]
     open_well:Tuple[bool,int]
     mode_of_water_storage:str
-    other_water_source:str 
+    other_water_source:str
 
 class _7_1_ApplianceUsage(BaseModel):
     appliance_name:str
     appliance_nos:int
-    appliance_dur:int 
+    appliance_dur:int
 
 class _7_SourceOfEnergy(BaseModel):
     electricity_conn:bool
@@ -99,7 +99,7 @@ class _7_SourceOfEnergy(BaseModel):
     lighting:Union[Tuple[str], List[str]]
     cooking:Union[Tuple[str], List[str]]
     cook_chullah:str
-    appliances:Union[List[_7_1_ApplianceUsage],Tuple[_7_1_ApplianceUsage]]    
+    appliances:Union[List[_7_1_ApplianceUsage],Tuple[_7_1_ApplianceUsage]]
 
 class _8_LandholdingInformationAcres(BaseModel):
     total_land:float
@@ -131,11 +131,11 @@ class _11_LivestockNumbers(BaseModel):
     poultry_and_ducks:int
     livestock_shelter:Union[List[str],Tuple[str]]
     avg_daily_milk_prod_litres:int
-    animal_waste_or_cow_dung_kgs:float 
+    animal_waste_or_cow_dung_kgs:float
 
 class _12_MajorProblems(BaseModel):
     problems:Union[List[str],Tuple[str]]
-    Suggestions_by_villagers:Union[List[str],Tuple[str]]       
+    Suggestions_by_villagers:Union[List[str],Tuple[str]]
 
 
 class FormData(BaseModel):
@@ -149,7 +149,7 @@ class FormData(BaseModel):
     gen_ho_info: _2_GeneralHouseHoldInformation
 
     # family info
-    fam_info: _3_FamilyInformation
+    fam_info: Union[List[_3_FamilyInformation], Tuple[_3_FamilyInformation]]
 
     #migration status
     mig_status: _4_MigrationStatusFamily

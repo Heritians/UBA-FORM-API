@@ -2,6 +2,8 @@ from API import app
 from API.utils.DBConnection import DBConnection
 from .RequestBodySchema import FormData
 
+from API.services.CommitToDB import *
+
 import json
 
 
@@ -23,9 +25,23 @@ def api_response_check():
     except Exception as e:
         print("Exception :", e)
 
-    return json.dumps(response_result)
+    return response_result
 
 
 @app.post("/api/post_data")
 def api_post_data(responses: FormData):
-    return {'test': 'success'}
+    response_result = {
+        'status': 'not_allowed',
+        'message': ['Not authenticated'],
+        'data': {}}
+    try:
+        commit_to_db(response_result, responses)
+        # print('hit')
+        # print(responses.respondent_prof)
+        # print(DBConnection.get_client())
+        return 200
+    except Exception as e:
+        print("Exception :", e)
+        return 422
+
+

@@ -27,7 +27,7 @@ class DBConnection:
         """
         The get_client() function is used to get the client instance. 
         """
-        return DBConnection.__client            
+        return DBConnection.__client
 
 
 
