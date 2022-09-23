@@ -36,9 +36,6 @@ def api_post_data(responses: FormData):
         'data': {}}
     try:
         commit_to_db(response_result, responses)
-        # print('hit')
-        # print(responses.respondent_prof)
-        # print(DBConnection.get_client())
         return 200
     except Exception as e:
         print("Exception :", e)
