@@ -1,7 +1,6 @@
 from ..RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
 
-from bson.objectid import ObjectId
 
 collection_names = {
     "sv": "static_vars",
@@ -50,16 +49,12 @@ def commit_to_db(response_result: dict, form_data: FormData):
     # gen_ho_data
     data = form_data.gen_ho_info.dict()
     data['_id'] = fid
-    DBQueries.insert_to_database(db, collection_names['ghi'] ,data)
+    DBQueries.insert_to_database(db, collection_names['ghi'], data)
 
     # fam_info
     data = form_data.fam_info
     data = [fam_mem_info.dict() for fam_mem_info in data]
-    print(data)
-
-    data = [indiv_info.update({'_id': fid}) for indiv_info in data]
-    # print(data)
-
+    [indiv_info.update({"_id": fid}) for indiv_info in data]
     DBQueries.insert_to_database(db, collection_names['fi'], data)
 
     # migration info
