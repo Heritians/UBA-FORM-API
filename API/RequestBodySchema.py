@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 from typing import Union, Tuple, List, Sequence
-from typing_extensions import TypedDict
 
 
 class _0_FormDetails(BaseModel):
