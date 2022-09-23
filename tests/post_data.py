@@ -20,7 +20,7 @@ class MyTestCase(unittest.TestCase):
     "relation_w_hoh": "string",
     "respondents_contact": "string",
     "id_type": "string",
-    "id_no": "string"
+    "id_no": "212121"
   },
   "gen_ho_info": {
     "ho_id": "string",
@@ -53,7 +53,40 @@ class MyTestCase(unittest.TestCase):
       "has_MNREGA": True,
       "SHG": True,
       "occupations": "string"
+    },
+    {
+      "name": "hemanth",
+      "age": 19,
+      "sex": "male",
+      "martial_status": "string",
+      "education": "string",
+      "schooling_status": "string",
+      "has_AADHAR": True,
+      "has_bank_acc": True,
+      "is_computer_literate": True,
+      "has_SSP": True,
+      "health_prob": "string",
+      "has_MNREGA": True,
+      "SHG": True,
+      "occupations": "string"
+    },
+    {
+      "name": "Mayuresh",
+      "age": 19,
+      "sex": "male",
+      "martial_status": "string",
+      "education": "string",
+      "schooling_status": "string",
+      "has_AADHAR": True,
+      "has_bank_acc": True,
+      "is_computer_literate": True,
+      "has_SSP": True,
+      "health_prob": "string",
+      "has_MNREGA": True,
+      "SHG": True,
+      "occupations": "string"
     }
+
   ],
   "mig_status": {
     "are_migrants": True,
