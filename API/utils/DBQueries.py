@@ -1,7 +1,7 @@
 from .DBConnection import DBConnection
 
 
-class DBQueries():
+class DBQueries:
 
 
     @classmethod
@@ -22,7 +22,7 @@ class DBQueries():
         """count dcouments in collection"""
         con = DBConnection.get_client()
 
-        mydb = DBQueries.con.client[db_name]
+        mydb = con[db_name]
         mycol = mydb[coll_name]
         return mycol.count_documents({})
 
