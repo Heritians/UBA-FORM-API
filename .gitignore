@@ -1,11 +1,11 @@
 # PyCharm files
-./.idea
+.idea
 
 # VScode files
 .vscode
 
 # env files
-.env
+# .env
 
 # cache files
 __pycache__
