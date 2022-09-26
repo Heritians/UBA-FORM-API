@@ -108,5 +108,7 @@ def commit_to_db(response_result: dict, form_data: FormData):
 def fetch_from_db(response_result: dict,resp_data:str):
     db = resp_data
     result=DBQueries.retrieve_documents(db)
+    return result
+
 
     
