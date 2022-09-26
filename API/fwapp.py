@@ -3,7 +3,6 @@ from API import app
 from API.utils.DBConnection import DBConnection
 from .RequestBodySchema import FormData
 from .ResponseBodySchema import EDAResponseData
-import pprint
 
 from API.services.DBManipulation import *
 
@@ -44,6 +43,7 @@ def api_post_data(responses: FormData):
         print("Exception :", e)
         return 422
 
+
 @app.get("/api/get_data",response_model=EDAResponseData)
 def api_get_data(village_name:str):
     response_result = {
@@ -52,7 +52,6 @@ def api_get_data(village_name:str):
         'data': {}}
     try:
         response_data=fetch_from_db(response_result,village_name)
-        pprint.pprint(response_data)
         return response_data["data"]
     except Exception as e:
         print("Exception :", e)

@@ -107,7 +107,6 @@ class _7_1_ApplianceUsage(BaseModel):
     appliance_name:str
     appliance_nos:int
     appliance_dur:int
-
 class _7_SourceOfEnergy(BaseModel):
     _id:ObjectId
     electricity_conn:bool
@@ -203,4 +202,5 @@ class EDAResponseData(BaseModel):
     livestock_nos: Union[List[_11_LivestockNumbers],Tuple[_11_LivestockNumbers]]
 
     # major problems
-    major_problems: Union[List[_12_MajorProblems],Tuple[_12_MajorProblems]]
+    major_problems: Union[List[_12_MajorProblems],Tuple[_12_MajorProblems]]            
+

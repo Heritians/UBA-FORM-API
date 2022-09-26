@@ -110,4 +110,5 @@ def fetch_from_db(response_result: dict,resp_data:str):
     result=DBQueries.retrieve_documents(db)
     return result
 
+
     
