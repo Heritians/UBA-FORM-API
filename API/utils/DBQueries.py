@@ -34,3 +34,12 @@ class DBQueries():
         mycol = mydb[coll_name]
 
         return mycol.find().sort('_id', -1)[0]
+
+    @classmethod
+    def retrieve_documents(cls,db_name):
+        con = DBConnection.get_client()
+        mydb = con[db_name]
+        for cols in mydb.list_collection_names():
+            print(cols)
+
+            
