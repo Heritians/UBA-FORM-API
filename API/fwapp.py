@@ -1,8 +1,10 @@
+from pprint import pprint
 from API import app
 from API.utils.DBConnection import DBConnection
 from .RequestBodySchema import FormData
+from .ResponseBodySchema import EDAResponseData
 
-from API.services.CommitToDB import *
+from API.services.DBManipulation import *
 
 import json
 
@@ -40,5 +42,19 @@ def api_post_data(responses: FormData):
     except Exception as e:
         print("Exception :", e)
         return 422
+
+
+@app.get("/api/get_data",response_model=EDAResponseData)
+def api_get_data(village_name:str):
+    response_result = {
+        'status': 'not_allowed',
+        'message': ['Not authenticated'],
+        'data': {}}
+    try:
+        response_data=fetch_from_db(response_result,village_name)
+        return response_data["data"]
+    except Exception as e:
+        print("Exception :", e)
+        return 422 
 
 
