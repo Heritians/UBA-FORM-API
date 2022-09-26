@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
-from typing import Union, Tuple, List, Sequence
-from typing_extensions import TypedDict
+from typing import Union, Tuple, List
 
 
 class _0_FormDetails(BaseModel):
@@ -110,12 +109,12 @@ class _8_LandholdingInformationAcres(BaseModel):
     uncultivable_area:float
 
 class _9_AgriculturalInputs(BaseModel):
-    is_chemical_fertilizer_used:Tuple[bool,int]
-    is_chemical_insecticide_used:Tuple[bool,int]
-    is_chemical_weedice_used:Tuple[bool,int]
-    is_chemical_organic_manuevers:Tuple[bool,int]
-    irrigation:Tuple[bool,int]
-    irrigation:Tuple[bool,int]
+    is_chemical_fertilizer_used:Tuple[bool,float]
+    is_chemical_insecticide_used:Tuple[bool,float]
+    is_chemical_weedice_used:Tuple[bool,float]
+    is_chemical_organic_manuevers:Tuple[bool,float]
+    irrigation:Tuple[bool,float]
+    irrigation:Tuple[bool,float]
 
 class _10_AgriculturalProductsNormalYear(BaseModel):
     crop_name:str
@@ -130,7 +129,7 @@ class _11_LivestockNumbers(BaseModel):
     bullocks:int
     poultry_and_ducks:int
     livestock_shelter:Union[List[str],Tuple[str]]
-    avg_daily_milk_prod_litres:int
+    avg_daily_milk_prod_litres:float
     animal_waste_or_cow_dung_kgs:float
 
 class _12_MajorProblems(BaseModel):
