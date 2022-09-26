@@ -39,6 +39,14 @@ class DBQueries:
         con = DBConnection.get_client()
         mydb = con[db_name]
         for cols in mydb.list_collection_names():
+            mycol=mydb[cols]
             print(cols)
+
+            for docs in mycol.find({}):
+                print(docs)
+
+
+
+            
 
             
