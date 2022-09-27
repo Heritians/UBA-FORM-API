@@ -1,11 +1,21 @@
 from API import app
 from API.utils.DBConnection import DBConnection
+from API.services.DBManipulation import *
 from .RequestBodySchema import FormData
 from .ResponseBodySchema import EDAResponseData
 
-from API.services.DBManipulation import *
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+from fastapi.staticfiles import StaticFiles
 
-import json
+# template and static files setup
+templates = Jinja2Templates(directory="API/templates/")
+app.mount("/static", StaticFiles(directory="API/static"), name="static")
+
+@app.get("/")
+@app.get("/home")
+def home(request: Request):
+    return templates.TemplateResponse('home.html',context={'request':request})
 
 
 @app.get("/api/response_check")
