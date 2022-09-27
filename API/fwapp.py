@@ -1,4 +1,3 @@
-from pprint import pprint
 from API import app
 from API.utils.DBConnection import DBConnection
 from .RequestBodySchema import FormData
