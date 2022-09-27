@@ -199,7 +199,7 @@ class MyTestCase(unittest.TestCase):
     ]
   }
 }
-        url = "http://localhost:8000/api/post_data"
+        url = "https://ubaformapi.vercel.app/api/post_data"
         response = requests.post(url, json=data)
         print(response.text)
         self.assertEqual(response.text, "200")  # add assertion here
