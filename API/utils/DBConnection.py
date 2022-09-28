@@ -1,7 +1,6 @@
 """ Import Important Packages"""
 import os
-from dotenv import load_dotenv
-load_dotenv()
+
 from pymongo import MongoClient
 
 database_uri=os.environ.get('DATABASE_URI') #Get the database URI
