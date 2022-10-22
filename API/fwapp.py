@@ -47,7 +47,7 @@ def api_post_data(responses: FormData):
         'data': {}}
     try:
         commit_to_db(response_result, responses)
-        return 200
+        return response_result
     except Exception as e:
         print("Exception :", e)
         return 422
@@ -64,6 +64,6 @@ def api_get_data(village_name:str):
         return response_data["data"]
     except Exception as e:
         print("Exception :", e)
-        return 422 
+        return 422
 
 
