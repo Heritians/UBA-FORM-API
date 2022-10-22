@@ -168,9 +168,8 @@ class MyTestCase(unittest.TestCase):
     "is_chemical_organic_manuevers": [
       0, 0
     ],
-    "irrigation": [
-      0, 0
-    ]
+    "irrigation": "None",
+    "irrigation_sys": "None"
   },
   "agri_products": {
     "crop_name": "string",
