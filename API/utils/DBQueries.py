@@ -1,3 +1,5 @@
+import pymongo.cursor
+
 from .DBConnection import DBConnection
 
 
@@ -49,3 +51,13 @@ class DBQueries:
             # pprint.pprint(mycol.full_name)
             # print(type(mycol.full_name))
         return response_data
+
+    @classmethod
+    def filtered_db_search(cls, db_name, coll_name, **kwargs) -> pymongo.cursor.Cursor:
+        con = DBConnection.get_client()
+
+        mydb = con[db_name]
+        mycol = mydb[coll_name]
+        cursor = mycol.find(kwargs)
+
+        return cursor
