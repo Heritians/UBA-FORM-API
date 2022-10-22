@@ -37,7 +37,7 @@ def commit_to_db(response_result: dict, form_data: FormData):
     db = form_data.static_vars.village_name
     cursor = DBQueries.filtered_db_search(db, collection_names['meta'], resp_id=form_data.respondent_prof.id_no)
 
-    if len(list(cursor)) is not 0:
+    if len(list(cursor)) != 0:
         response_result['status'] = 'failed'
         response_result['message'].append('Respondent Already exists')
 
