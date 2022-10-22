@@ -2,7 +2,7 @@ from API import app
 from API.utils.DBConnection import DBConnection
 from API.services.DBManipulation import *
 from .RequestBodySchema import FormData
-from .ResponseBodySchema import EDAResponseData
+from .ResponseBodySchema import EDAResponseData,FrontendResponseModel
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
@@ -19,7 +19,7 @@ def home(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
 
-@app.get("/api/response_check")
+@app.get("/api/response_check",response_model=FrontendResponseModel)
 def api_response_check():
     response_result = {
         "status": "not_allowed",
@@ -41,7 +41,7 @@ def api_response_check():
     return response_result
 
 
-@app.post("/api/post_data")
+@app.post("/api/post_data",response_model=FrontendResponseModel)
 def api_post_data(responses: FormData):
     response_result = {
         "status": "not_allowed",
@@ -52,8 +52,9 @@ def api_post_data(responses: FormData):
         commit_to_db(response_result, responses)
         return response_result
     except Exception as e:
+        response_result['status'] = 'error'
         print("Exception :", e)
-        return 422
+        return response_result
 
 
 @app.get("/api/get_data", response_model=EDAResponseData)
@@ -70,7 +71,7 @@ def api_get_data(village_name: str):
         print("Exception :", e)
         return 422
 
-@app.get("/api/get_familydata")
+@app.get("/api/get_familydata",response_model=FrontendResponseModel)
 def api_get_familydata(village_name:str,respondents_id: str):
     response_result = {
         "status": "not_allowed",
@@ -79,10 +80,31 @@ def api_get_familydata(village_name:str,respondents_id: str):
     }
     try:
         familydata=fetch_familydata(response_result, village_name,respondents_id)
-        return familydata["data"]
+        response_result['data']=familydata["data"]
+        response_result['status'] = 'success'
+        return response_result
 
     except Exception as e:
+        response_result['status'] = 'error'
         print("Exception :", e)
-        return 422
+        return response_result
 
+@app.get("/api/get_individual_data",response_model=FrontendResponseModel)
+def api_get_individual_data(village_name:str,respondents_id: str):
+    response_result = {
+        "status": "not_allowed",
+        "message": ["Not authenticated"],
+        "data": {},
+    }
+    try:
+        indivdualdata=fetch_individualdata(response_result, village_name,respondents_id)
+        response_result['data']=indivdualdata
+        response_result['status'] = 'success'
+        return response_result
+
+    except Exception as e:
+        response_result['status'] = 'error'
+        print("Exception :", e)
+        return response_result
+        
 
