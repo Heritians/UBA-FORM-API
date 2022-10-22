@@ -1,3 +1,5 @@
+import pymongo.cursor
+
 from .DBConnection import DBConnection
 # fix ObjectId & FastApi conflict
 import pydantic
@@ -75,15 +77,22 @@ class DBQueries:
         __id=cls.retrieve__id(db_name,respondent_id)
         print(__id)
         for cols in mydb.list_collection_names():
+            if cols=="meta":
+                continue
             mycol = mydb[cols]
-            li = [docs for docs in mycol.find({"__id":ObjectId(__id)})]
+            # print(mycol)
+            li = [docs for docs in mycol.find({"__id": __id},{'_id':0,'__id':0})]
+            print(li)
             response_data["data"].update({mycol.full_name.split('.')[-1]: li})
         return response_data
-        
 
 
+    @classmethod
+    def filtered_db_search(cls, db_name, coll_name, **kwargs) -> pymongo.cursor.Cursor:
+        con = DBConnection.get_client()
 
-        
+        mydb = con[db_name]
+        mycol = mydb[coll_name]
+        cursor = mycol.find(kwargs)
 
-
- 
+        return cursor

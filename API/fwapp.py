@@ -50,7 +50,7 @@ def api_post_data(responses: FormData):
     }
     try:
         commit_to_db(response_result, responses)
-        return 200
+        return response_result
     except Exception as e:
         print("Exception :", e)
         return 422

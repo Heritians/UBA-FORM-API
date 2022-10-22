@@ -113,8 +113,8 @@ class _9_AgriculturalInputs(BaseModel):
     is_chemical_insecticide_used:Tuple[bool,float]
     is_chemical_weedice_used:Tuple[bool,float]
     is_chemical_organic_manuevers:Tuple[bool,float]
-    irrigation:Tuple[bool,float]
-    irrigation:Tuple[bool,float]
+    irrigation:str
+    irrigation_sys:str
 
 class _10_AgriculturalProductsNormalYear(BaseModel):
     crop_name:str
