@@ -110,5 +110,13 @@ def fetch_from_db(response_result: dict,resp_data:str):
     result=DBQueries.retrieve_documents(db)
     return result
 
+def fetch_familydata(response_result: dict,resp_data:str,respondent_id:str):
+    db = resp_data
+    result=DBQueries.retrieve_documents_by_id(db,respondent_id)
+    return result
+
+
+      
+
 
     
