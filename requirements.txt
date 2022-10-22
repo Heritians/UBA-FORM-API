@@ -1,3 +1,9 @@
 pymongo==3.12.1
 fastapi==0.85.0
 Jinja2==3.1.2
+pytest
+requests
+pytest-cov
+pytest-mock
+pytruth
+hypothesis
