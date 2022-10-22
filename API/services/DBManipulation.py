@@ -1,5 +1,6 @@
 from ..RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
+from ..utils.DBConnection import DBConnection
 
 
 collection_names = {
@@ -35,10 +36,10 @@ collection_names = {
 
 def commit_to_db(response_result: dict, form_data: FormData):
     db = form_data.static_vars.village_name
-    cursor = DBQueries.filtered_db_search(db, collection_names['meta'], resp_id=form_data.respondent_prof.id_no)
+    cursor = DBQueries.filtered_db_search(db, collection_names['meta'],[],resp_id=form_data.respondent_prof.id_no)
 
-    if len(list(cursor)) != 0:
-        response_result['status'] = 'failed'
+    if db in DBConnection.get_client().list_database_names() and len(list(cursor))!=0 :
+        response_result['status'] = 'abort'
         response_result['message'].append('Respondent Already exists')
 
     else:
@@ -123,6 +124,9 @@ def fetch_familydata(response_result: dict,resp_data:str,respondent_id:str):
     result=DBQueries.retrieve_documents_by_id(db,respondent_id)
     return result
 
+def fetch_individualdata(response_result: dict,db_name:str,respondent_id:str):
+    result=DBQueries.fetch_indiv_document(db_name,respondent_id)
+    return result
 
       
 

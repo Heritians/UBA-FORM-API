@@ -10,3 +10,6 @@
 # cache files
 __pycache__
 .vercel
+
+#test files
+postdata.json

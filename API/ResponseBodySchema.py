@@ -53,7 +53,7 @@ class _3_FamilyInformation(BaseModel):
     martial_status: str
     education: str
     schooling_status: str
-    has_AADHAR: bool
+    AADHAR_No: str
     has_bank_acc: bool
     is_computer_literate: bool
     has_SSP: bool
@@ -202,5 +202,11 @@ class EDAResponseData(BaseModel):
     livestock_nos: Union[List[_11_LivestockNumbers],Tuple[_11_LivestockNumbers]]
 
     # major problems
-    major_problems: Union[List[_12_MajorProblems],Tuple[_12_MajorProblems]]            
+    major_problems: Union[List[_12_MajorProblems],Tuple[_12_MajorProblems]]
 
+class FrontendResponseModel(BaseModel):
+    status:str
+    message: List[str]
+    data:dict
+
+    

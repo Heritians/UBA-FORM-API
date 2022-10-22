@@ -44,7 +44,7 @@ class _3_FamilyInformation(BaseModel):
     martial_status: str
     education: str
     schooling_status: str
-    has_AADHAR: bool
+    AADHAR_No: str
     has_bank_acc: bool
     is_computer_literate: bool
     has_SSP: bool

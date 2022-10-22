@@ -75,24 +75,27 @@ class DBQueries:
         response_data = {}
         response_data["data"] = {}
         __id=cls.retrieve__id(db_name,respondent_id)
-        print(__id)
         for cols in mydb.list_collection_names():
             if cols=="meta":
                 continue
             mycol = mydb[cols]
             # print(mycol)
-            li = [docs for docs in mycol.find({"__id": __id},{'_id':0,'__id':0})]
-            print(li)
+            li = [docs for docs in cls.filtered_db_search(db_name,cols,['__id','_id'],__id=__id)]
             response_data["data"].update({mycol.full_name.split('.')[-1]: li})
         return response_data
 
 
     @classmethod
-    def filtered_db_search(cls, db_name, coll_name, **kwargs) -> pymongo.cursor.Cursor:
+    def filtered_db_search(cls, db_name, coll_name,fields_to_drop ,**kwargs) -> pymongo.cursor.Cursor:
         con = DBConnection.get_client()
 
         mydb = con[db_name]
         mycol = mydb[coll_name]
-        cursor = mycol.find(kwargs)
+        cursor = mycol.find(kwargs,{i:0 for i in fields_to_drop})
 
         return cursor
+
+    @classmethod
+    def fetch_indiv_document(cls,db_name,respondent_id):
+        indivdata = [docs for docs in cls.filtered_db_search(db_name,'fam_info',['__id','_id'],AADHAR_No=respondent_id)]
+        return indivdata[0]

@@ -25,7 +25,7 @@ class MyTestCase(unittest.TestCase):
     "relation_w_hoh": "string",
     "respondents_contact": "string",
     "id_type": "string",
-    "id_no": "212121"
+    "id_no": "string"
   },
   "gen_ho_info": {
     "ho_id": "string",
@@ -50,7 +50,7 @@ class MyTestCase(unittest.TestCase):
       "martial_status": "string",
       "education": "string",
       "schooling_status": "string",
-      "has_AADHAR": True,
+      "AADHAR_No": 1234,
       "has_bank_acc": True,
       "is_computer_literate": True,
       "has_SSP": True,
@@ -66,7 +66,7 @@ class MyTestCase(unittest.TestCase):
       "martial_status": "string",
       "education": "string",
       "schooling_status": "string",
-      "has_AADHAR": True,
+      "AADHAR_No": 1234,
       "has_bank_acc": True,
       "is_computer_literate": True,
       "has_SSP": True,
@@ -82,7 +82,7 @@ class MyTestCase(unittest.TestCase):
       "martial_status": "string",
       "education": "string",
       "schooling_status": "string",
-      "has_AADHAR": True,
+      "AADHAR_No": 1234,
       "has_bank_acc": True,
       "is_computer_literate": True,
       "has_SSP": True,
@@ -203,7 +203,7 @@ class MyTestCase(unittest.TestCase):
     ]
   }
 }
-        url = "https://ubaformapi-7hv22znbu-fastapis-build.vercel.app/api/post_data"
+        url = "http://localhost/api/post_data"
         response = requests.post(url, json=data)
         print(response.text)
         self.assertEqual(response.json()['status'], 'failed')  # add assertion here
@@ -251,7 +251,7 @@ class MyTestCase(unittest.TestCase):
             "martial_status": "string",
             "education": "string",
             "schooling_status": "string",
-            "has_AADHAR": True,
+            "AADHAR_No": 1234,
             "has_bank_acc": True,
             "is_computer_literate": True,
             "has_SSP": True,
@@ -267,7 +267,7 @@ class MyTestCase(unittest.TestCase):
             "martial_status": "string",
             "education": "string",
             "schooling_status": "string",
-            "has_AADHAR": True,
+            "AADHAR_No": 1234,
             "has_bank_acc": True,
             "is_computer_literate": True,
             "has_SSP": True,
@@ -283,7 +283,7 @@ class MyTestCase(unittest.TestCase):
             "martial_status": "string",
             "education": "string",
             "schooling_status": "string",
-            "has_AADHAR": True,
+            "AADHAR_No": 1234,
             "has_bank_acc": True,
             "is_computer_literate": True,
             "has_SSP": True,
@@ -404,7 +404,7 @@ class MyTestCase(unittest.TestCase):
           ]
         }
       }
-        url = "https://ubaformapi-7hv22znbu-fastapis-build.vercel.app/api/post_data"
+        url = "http://localhost/api/post_data"
         response = requests.post(url, json=data)
         print(response.json())
         self.assertEqual(response.json()['status'], 'success')  # add assertion here
