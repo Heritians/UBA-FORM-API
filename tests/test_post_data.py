@@ -203,10 +203,10 @@ class MyTestCase(unittest.TestCase):
     ]
   }
 }
-        url = "http://localhost/api/post_data"
+        url = "https://ubaformapi-git-prod-fastapis-build.vercel.app/api/post_data"
         response = requests.post(url, json=data)
         print(response.text)
-        self.assertEqual(response.json()['status'], 'failed')  # add assertion here
+        self.assertEqual(response.json()['status'], 'abort')  # add assertion here
 
     def test_post2db_new(self):
         import requests
@@ -404,7 +404,7 @@ class MyTestCase(unittest.TestCase):
           ]
         }
       }
-        url = "http://localhost/api/post_data"
+        url = "https://ubaformapi-git-prod-fastapis-build.vercel.app/api/post_data"
         response = requests.post(url, json=data)
         print(response.json())
         self.assertEqual(response.json()['status'], 'success')  # add assertion here
