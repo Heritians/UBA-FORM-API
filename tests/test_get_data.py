@@ -7,7 +7,7 @@ class MyGetTestCase(unittest.TestCase):
     def test_get_fromdb(self):
         import requests
 
-        url = "https://ubaformapi.vercel.app/api/get_data"
+        url = "https://ubaformapi-jeddubx5l-fastapis-build.vercel.app"
         retreive=requests.get(url,'string')
         # print(retreive.json()["detail"])
         self.assertEqual(isinstance(retreive.json(),dict),True)
