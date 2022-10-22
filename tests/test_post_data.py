@@ -203,7 +203,7 @@ class MyTestCase(unittest.TestCase):
     ]
   }
 }
-        url = "https://ubaformapi-jeddubx5l-fastapis-build.vercel.app"
+        url = "https://ubaformapi-7hv22znbu-fastapis-build.vercel.app/api/post_data"
         response = requests.post(url, json=data)
         print(response.text)
         self.assertEqual(response.json()['status'], 'failed')  # add assertion here
@@ -404,7 +404,7 @@ class MyTestCase(unittest.TestCase):
           ]
         }
       }
-        url = "https://ubaformapi-jeddubx5l-fastapis-build.vercel.app"
+        url = "https://ubaformapi-7hv22znbu-fastapis-build.vercel.app/api/post_data"
         response = requests.post(url, json=data)
         print(response.json())
         self.assertEqual(response.json()['status'], 'success')  # add assertion here
