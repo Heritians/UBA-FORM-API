@@ -4,12 +4,14 @@ from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
 from .models.FrontendResponseSchema import FrontendResponseModel
 from .models.EDAResponseSchema import EDAResponseData
-from .models.AuthSchema import UserOut, UserAuth
+from .models.AuthSchema import UserOut, UserAuth, TokenSchema
 
-#templating imports
 from fastapi.templating import Jinja2Templates
-from fastapi import Request
+from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
+from fastapi.security import OAuth2PasswordRequestForm
+
+from typing import Union
 
 
 
@@ -129,3 +131,17 @@ async def create_user(data: UserAuth):
         return response_result
 
 
+@app.post('/login', summary="Log-in to the user account", response_model=TokenSchema)
+async def login(form_data: UserAuth = Depends()):
+    tokens = {
+        "status": "aa",
+        "access_token": "str",
+        "refresh_token": "str"
+    }
+    try:
+        user_login(tokens, form_data)
+        return tokens
+
+    except Exception as e:
+        print("Exception :", e)
+        return tokens

@@ -2,6 +2,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 class TokenSchema(BaseModel):
+    status: str
     access_token: str
     refresh_token: str
     

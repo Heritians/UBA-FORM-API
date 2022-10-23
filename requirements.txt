@@ -1,6 +1,6 @@
-pymongo==3.12.1
+pymongo
 fastapi==0.85.0
-Jinja2==3.1.2
+Jinja2
 pytest
 requests
 pytest-cov
