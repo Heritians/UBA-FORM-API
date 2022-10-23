@@ -4,15 +4,12 @@ from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
 from .models.FrontendResponseSchema import FrontendResponseModel
 from .models.EDAResponseSchema import EDAResponseData
-from .models.AuthSchema import UserOut, UserAuth, TokenSchema
+from .models.AuthSchema import UserAuth, TokenSchema
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
-from fastapi.security import OAuth2PasswordRequestForm
-
-from typing import Union
-
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
 
 # template and static files setup

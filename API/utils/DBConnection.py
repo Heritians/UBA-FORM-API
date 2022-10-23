@@ -2,9 +2,12 @@
 import os
 
 from pymongo import MongoClient
-from dotenv import load_dotenv
-load_dotenv()
-database_uri=os.environ.get('DATABASE_URI') #Get the database URI
+# from dotenv import load_dotenv
+# load_dotenv()
+# database_uri=os.environ.get('DATABASE_URI') #Get the database URI
+
+from ..core.ConfigEnv import settings
+database_uri = settings.DATABASE_URI
 
 class DBConnection:
     """ 

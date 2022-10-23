@@ -1,12 +1,14 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 from datetime import datetime, timedelta
 from typing import Union,Any
 from jose import jwt
 
 from passlib.context import CryptContext
+
+from ..core.ConfigEnv import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
@@ -30,7 +32,7 @@ class Auth:
             expires_delta = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
         to_encode = {"exp": expires_delta, "sub": str(subject)}
-        encoded_jwt = jwt.encode(to_encode, os.environ.get('JWT_SECRET_KEY'), os.environ.get('ALGORITHM'))
+        encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, settings.ALGORITHM)
         return encoded_jwt
 
     @staticmethod    
@@ -41,5 +43,5 @@ class Auth:
             expires_delta = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
         
         to_encode = {"exp": expires_delta, "sub": str(subject)}
-        encoded_jwt = jwt.encode(to_encode, os.environ.get('JWT_SECRET_KEY'), os.environ.get('ALGORITHM'))
+        encoded_jwt = jwt.encode(to_encode, settings.JWT_REFRESH_SECRET_KEY, settings.ALGORITHM)
         return encoded_jwt
