@@ -1,12 +1,17 @@
 from API import app
-from API.utils.DBConnection import DBConnection
 from API.services.DBManipulation import *
-from .RequestBodySchema import FormData
-from .ResponseBodySchema import EDAResponseData,FrontendResponseModel
+from API.services.AuthServices import *
+from .models.RequestBodySchema import FormData
+from .models.FrontendResponseSchema import FrontendResponseModel
+from .models.EDAResponseSchema import EDAResponseData
+from .models.AuthSchema import UserOut, UserAuth
 
+#templating imports
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from fastapi.staticfiles import StaticFiles
+
+
 
 # template and static files setup
 templates = Jinja2Templates(directory="API/templates/")
@@ -28,7 +33,7 @@ def api_response_check():
     }
     try:
         db_msg = ""
-        if DBConnection.flag:
+        if get_db_conn_flag():
             db_msg = "Connection Successful to db!"
         else:
             db_msg = "Connection failed to db"
@@ -106,5 +111,21 @@ def api_get_individual_data(village_name:str,respondents_id: str):
         response_result['status'] = 'error'
         print("Exception :", e)
         return response_result
-        
+
+@app.post('/signup', summary="Create new user", response_model=FrontendResponseModel)
+async def create_user(data: UserAuth):
+    response_result = {
+        "status": "not_allowed",
+        "message": ["Not authenticated"],
+        "data": {},
+    }
+    try:
+        signup(response_result,data)
+        return response_result
+
+    except Exception as e:
+        response_result['status'] = 'error'
+        print("Exception :", e)
+        return response_result
+
 

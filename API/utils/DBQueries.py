@@ -99,3 +99,5 @@ class DBQueries:
     def fetch_indiv_document(cls,db_name,respondent_id):
         indivdata = [docs for docs in cls.filtered_db_search(db_name,'fam_info',['__id','_id'],AADHAR_No=respondent_id)]
         return indivdata[0]
+
+        

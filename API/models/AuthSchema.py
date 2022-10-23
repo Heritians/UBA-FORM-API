@@ -1,0 +1,27 @@
+from uuid import UUID
+from pydantic import BaseModel, Field
+
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+    
+    
+class TokenPayload(BaseModel):
+    sub: str = None
+    exp: int = None
+
+
+class UserAuth(BaseModel):
+    AADHAR_NO: str = Field(..., description="user Aadhar number")
+    password: str = Field(..., min_length=5, max_length=24, description="user password")
+    village_name:str = Field(..., description="user village name")
+    role:str=Field(..., description="user role")
+    
+
+class UserOut(BaseModel):
+    id: UUID
+    AADHAR_NO: str
+
+
+class SystemUser(UserOut):
+    password: str

@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from typing import Union, Tuple, List
 from bson.objectid import ObjectId
 
-
 class _0_FormDetails(BaseModel):
     _id:ObjectId
     village_name: str
@@ -203,10 +202,3 @@ class EDAResponseData(BaseModel):
 
     # major problems
     major_problems: Union[List[_12_MajorProblems],Tuple[_12_MajorProblems]]
-
-class FrontendResponseModel(BaseModel):
-    status:str
-    message: List[str]
-    data:dict
-
-    
