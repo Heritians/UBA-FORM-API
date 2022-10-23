@@ -1,4 +1,4 @@
-from ..RequestBodySchema import FormData
+from ..models.RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
 from ..utils.DBConnection import DBConnection
 
@@ -127,6 +127,9 @@ def fetch_familydata(response_result: dict,resp_data:str,respondent_id:str):
 def fetch_individualdata(response_result: dict,db_name:str,respondent_id:str):
     result=DBQueries.fetch_indiv_document(db_name,respondent_id)
     return result
+
+def get_db_conn_flag():
+    return DBConnection.flag   
 
       
 

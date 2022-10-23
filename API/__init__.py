@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from API.utils.DBConnection import DBConnection
-
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 app = FastAPI()
