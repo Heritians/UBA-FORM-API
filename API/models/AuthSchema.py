@@ -21,7 +21,6 @@ class UserAuth(BaseModel):
     
 
 class UserOut(BaseModel):
-    id: UUID
     AADHAR_NO: str
 
 

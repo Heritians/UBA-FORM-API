@@ -1,17 +1,25 @@
-import os
-# from dotenv import load_dotenv
-# load_dotenv()
-
+# import os
 from datetime import datetime, timedelta
-from typing import Union,Any
-from jose import jwt
+from typing import Union, Any, Optional, Dict
+from pydantic import ValidationError
 
+from jose import jwt
 from passlib.context import CryptContext
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+
 from ..core.ConfigEnv import settings
+from ..models.AuthSchema import TokenPayload, SystemUser
+from ..utils.DBQueries import DBQueries
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
+
+reuseable_oauth = OAuth2PasswordBearer(
+    tokenUrl="/login",
+    scheme_name="JWT"
+)
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -45,3 +53,38 @@ class Auth:
         to_encode = {"exp": expires_delta, "sub": str(subject)}
         encoded_jwt = jwt.encode(to_encode, settings.JWT_REFRESH_SECRET_KEY, settings.ALGORITHM)
         return encoded_jwt
+
+
+    @staticmethod
+    async def get_current_user(token: str = Depends(reuseable_oauth)) -> SystemUser:
+        try:
+            payload = jwt.decode(
+                token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+            )
+            token_data = TokenPayload(**payload)
+            print(token_data.sub)
+
+            if datetime.fromtimestamp(token_data.exp) < datetime.now():
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Token expired",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+        except(jwt.JWTError, ValidationError):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        cursor = DBQueries.filtered_db_search("Auth", "admin",['_id'],AADHAR=token_data.sub)
+        user: Optional[Dict[str, Any]] = list(cursor)[0]
+        print(user)
+
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Could not find user",
+            )
+
+        return SystemUser(**user)

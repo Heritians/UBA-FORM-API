@@ -41,3 +41,7 @@ def user_login(tokens, form_data: UserAuth):
             tokens['refresh_token'] = Auth.create_refresh_token(form_data.AADHAR_NO)
             tokens['status'] = 'login successful'
             tokens['role'] = form_data.role
+
+
+def get_my_info():
+    return Auth.get_current_user
