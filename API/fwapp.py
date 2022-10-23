@@ -134,9 +134,9 @@ async def create_user(data: UserAuth):
 @app.post('/login', summary="Log-in to the user account", response_model=TokenSchema)
 async def login(form_data: UserAuth = Depends()):
     tokens = {
-        "status": "aa",
-        "access_token": "str",
-        "refresh_token": "str"
+        "status": "Internal Server Error 505",
+        "access_token": "",
+        "refresh_token": ""
     }
     try:
         user_login(tokens, form_data)

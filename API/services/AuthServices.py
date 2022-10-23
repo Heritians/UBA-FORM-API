@@ -29,20 +29,14 @@ def signup(response_result, data: UserAuth):
 def user_login(tokens, form_data: UserAuth):
     user = DBQueries.filtered_db_search("Auth", form_data.role, ['_id'], AADHAR=form_data.AADHAR_NO)
     data = list(user)
-    # print(list(user))
-    print(data)
-    if len(list(user)) == 0:
-        tokens['status'] = 'Login failed'
+    if len(data) is 0:
+        tokens['status'] = 'login failed'
     else:
-        tokens['status'] = 'Login passed'
 
-    # if not verify_password(form_data.password, hashed_pass):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_400_BAD_REQUEST,
-    #         detail="Incorrect email or password"
-    #     )
-    #
-    # return {
-    #     "access_token": create_access_token(user['email']),
-    #     "refresh_token": create_refresh_token(user['email']),
-    # }
+        if not Auth.verify_password(form_data.password, data[0]['password']):
+            tokens['status'] = 'login failed'
+
+        else:
+            tokens['access_token'] = Auth.create_access_token(form_data.AADHAR_NO)
+            tokens['refresh_token'] = Auth.create_refresh_token(form_data.AADHAR_NO)
+            tokens['status'] = 'login successful'

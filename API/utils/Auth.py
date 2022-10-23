@@ -28,7 +28,7 @@ class Auth:
             expires_delta = datetime.utcnow() + expires_delta
         else:
             expires_delta = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        
+
         to_encode = {"exp": expires_delta, "sub": str(subject)}
         encoded_jwt = jwt.encode(to_encode, os.environ.get('JWT_SECRET_KEY'), os.environ.get('ALGORITHM'))
         return encoded_jwt
@@ -42,4 +42,4 @@ class Auth:
         
         to_encode = {"exp": expires_delta, "sub": str(subject)}
         encoded_jwt = jwt.encode(to_encode, os.environ.get('JWT_SECRET_KEY'), os.environ.get('ALGORITHM'))
-        return encoded_jwt    
+        return encoded_jwt
