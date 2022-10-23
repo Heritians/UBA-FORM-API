@@ -133,7 +133,8 @@ async def login(form_data: UserAuth = Depends()):
     tokens = {
         "status": "Internal Server Error 505",
         "access_token": "",
-        "refresh_token": ""
+        "refresh_token": "",
+        "role": "unauthorized"
     }
     try:
         user_login(tokens, form_data)

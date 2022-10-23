@@ -5,6 +5,7 @@ class TokenSchema(BaseModel):
     status: str
     access_token: str
     refresh_token: str
+    role: str
     
     
 class TokenPayload(BaseModel):
