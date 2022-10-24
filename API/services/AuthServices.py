@@ -1,12 +1,10 @@
-import re
-from API.utils.Auth import Auth
-from ..models.AuthSchema import UserOut, UserAuth
-from ..models.RequestBodySchema import FormData
-from ..utils.DBQueries import DBQueries
-from ..utils.DBConnection import DBConnection
+from jose import jwt
 
-from fastapi import status, HTTPException
-from fastapi.responses import RedirectResponse
+from API.utils.Auth import Auth
+from ..core.ConfigEnv import settings
+from ..models.AuthSchema import UserOut, UserAuth
+from ..models.AuthSchema import TokenPayload
+from ..utils.DBQueries import DBQueries
 
 
 def signup(response_result, data: UserAuth):
@@ -43,5 +41,17 @@ def user_login(tokens, form_data: UserAuth):
             tokens['role'] = form_data.role
 
 
-def get_my_info():
-    return Auth.get_current_user
+def get_current_user_credentials(token: str) -> UserOut:
+    payload = jwt.decode(
+        token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+    )
+    token_data = TokenPayload(**payload)
+
+    cursor = DBQueries.filtered_db_search("Auth", "admin", ['_id', 'password'], AADHAR=token_data.sub)
+    user = list(cursor)[0]
+    print(user)
+
+    if user is None:
+        print("Not Authenticated")
+
+    return user
