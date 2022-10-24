@@ -4,7 +4,8 @@ from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
 from .models.FrontendResponseSchema import FrontendResponseModel
 from .models.EDAResponseSchema import EDAResponseData
-from .models.AuthSchema import UserAuth, TokenSchema, SystemUser
+from .models.AuthSchema import UserAuth, TokenSchema, UserOut
+from .utils.JWTBearer import JWTBearer
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
@@ -145,5 +146,8 @@ async def login(form_data: UserAuth = Depends()):
 
 
 @app.get('/me', summary='Get details of currently logged in user', response_model=UserOut)
-async def get_me(user: SystemUser = Depends()):
-    return user
+async def get_me(user: str = Depends(JWTBearer())):
+    print(user, "ssss", type(user))
+    data = get_current_user_credentials(user)
+    print(data)
+    return data

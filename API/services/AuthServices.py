@@ -1,18 +1,10 @@
-from API.utils.Auth import Auth
-from ..models.AuthSchema import UserOut, UserAuth
-from ..models.RequestBodySchema import FormData
-from ..models.AuthSchema import TokenPayload, SystemUser
-from ..utils.DBQueries import DBQueries
-from ..core.ConfigEnv import settings
-
-from fastapi.responses import RedirectResponse
-from fastapi import Depends, HTTPException, status
-from pydantic import ValidationError
-
 from jose import jwt
 
-from datetime import datetime, timedelta
-from typing import Dict, Optional, Any
+from API.utils.Auth import Auth
+from ..core.ConfigEnv import settings
+from ..models.AuthSchema import UserOut, UserAuth
+from ..models.AuthSchema import TokenPayload
+from ..utils.DBQueries import DBQueries
 
 
 def signup(response_result, data: UserAuth):
@@ -49,35 +41,17 @@ def user_login(tokens, form_data: UserAuth):
             tokens['role'] = form_data.role
 
 
-async def get_current_user(token: str = Depends()) -> SystemUser:
-    try:
-        payload = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        token_data = TokenPayload(**payload)
-        print(token_data.sub)
+def get_current_user_credentials(token: str) -> UserOut:
+    payload = jwt.decode(
+        token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+    )
+    token_data = TokenPayload(**payload)
 
-        if datetime.fromtimestamp(token_data.exp) < datetime.now():
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token expired",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-    except(jwt.JWTError, ValidationError):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    cursor = DBQueries.filtered_db_search("Auth", "admin", ['_id'], AADHAR=token_data.sub)
-    user: Optional[Dict[str, Any]] = list(cursor)[0]
+    cursor = DBQueries.filtered_db_search("Auth", "admin", ['_id', 'password'], AADHAR=token_data.sub)
+    user = list(cursor)[0]
     print(user)
 
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Could not find user",
-        )
+        print("Not Authenticated")
 
-    return SystemUser(**user)
+    return user

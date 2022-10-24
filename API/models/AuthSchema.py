@@ -20,8 +20,5 @@ class UserAuth(BaseModel):
     
 
 class UserOut(BaseModel):
-    AADHAR_NO: str
-
-
-class SystemUser(UserOut):
-    password: str
+    AADHAR: str
+    village_name: str
