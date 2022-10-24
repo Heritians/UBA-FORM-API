@@ -3,7 +3,7 @@ from ..models.AuthSchema import TokenPayload
 
 from datetime import datetime
 
-from fastapi import Request
+from fastapi import Request,HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import ValidationError
 from jose import jwt
@@ -18,17 +18,17 @@ class JWTBearer(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
-                print("Invalid scheme")
+                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             else:
                 is_valid = JWTBearer.token_validation(credentials.credentials)
-                if is_valid:
-                    return credentials.credentials
-
+                if not is_valid:
+                    raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+                return credentials.credentials
         else:
-            print("Invalid auth code")
+            raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     @staticmethod
-    async def token_validation(token: str) -> bool:
+    def token_validation(token: str) -> bool:
         try:
             payload = jwt.decode(
                 token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
