@@ -21,13 +21,13 @@ def signup(response_result, data: UserAuth):
         }
         DBQueries.insert_to_database("Auth", data.role, userinfo)  # saving user to database
         response_result['status'] = f'success'
-        response_result['message'].append(f'User with this AADHAR NO created successfully')
+        response_result['message']=[f'User with this AADHAR NO created successfully']
 
 
 def user_login(tokens, form_data: UserAuth):
     user = DBQueries.filtered_db_search("Auth", form_data.role, ['_id'], AADHAR=form_data.AADHAR_NO)
     data = list(user)
-    if len(data) is 0:
+    if len(data) == 0:
         tokens['status'] = 'login failed'
     else:
 
@@ -35,8 +35,9 @@ def user_login(tokens, form_data: UserAuth):
             tokens['status'] = 'login failed'
 
         else:
-            tokens['access_token'] = Auth.create_access_token(form_data.AADHAR_NO)
-            tokens['refresh_token'] = Auth.create_refresh_token(form_data.AADHAR_NO)
+            sub=form_data.AADHAR_NO+"_"+form_data.role
+            tokens['access_token'] = Auth.create_access_token(sub)
+            tokens['refresh_token'] = Auth.create_refresh_token(sub)
             tokens['status'] = 'login successful'
             tokens['role'] = form_data.role
 
@@ -46,12 +47,19 @@ def get_current_user_credentials(token: str) -> UserOut:
         token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
     )
     token_data = TokenPayload(**payload)
-
-    cursor = DBQueries.filtered_db_search("Auth", "admin", ['_id', 'password'], AADHAR=token_data.sub)
+    AADHAR,role=token_data.sub.split("_")
+    cursor = DBQueries.filtered_db_search("Auth", role, ['_id', 'password'], AADHAR=AADHAR)
     user = list(cursor)[0]
-    print(user)
 
-    if user is None:
-        print("Not Authenticated")
+    # if user is None:
+    #     print("Not Authenticated")
 
     return user
+
+def get_role(token: str) -> str:
+    payload = jwt.decode(
+        token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+    )
+    token_data = TokenPayload(**payload)
+    role=token_data.sub.split("_")[1]
+    return role

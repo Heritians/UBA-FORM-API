@@ -10,6 +10,7 @@ from .utils.JWTBearer import JWTBearer
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
+from typing import Union
 
 
 # template and static files setup
@@ -17,13 +18,13 @@ templates = Jinja2Templates(directory="API/templates/")
 app.mount("/static", StaticFiles(directory="API/static"), name="static")
 
 
-@app.get("/")
-@app.get("/home")
+@app.get("/",tags=["Home"])
+@app.get("/home",tags=["Home"])
 def home(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
 
-@app.get("/api/response_check",response_model=FrontendResponseModel)
+@app.get("/api/response_check",response_model=FrontendResponseModel,tags=["Frontend Response"])
 def api_response_check():
     response_result = {
         "status": "not_allowed",
@@ -45,7 +46,7 @@ def api_response_check():
     return response_result
 
 
-@app.post("/api/post_data",response_model=FrontendResponseModel)
+@app.post("/api/post_data",response_model=FrontendResponseModel,dependencies=[Depends(JWTBearer())],tags=["Frontend Response"])
 def api_post_data(responses: FormData):
     response_result = {
         "status": "not_allowed",
@@ -61,13 +62,17 @@ def api_post_data(responses: FormData):
         return response_result
 
 
-@app.get("/api/get_data", response_model=EDAResponseData)
-def api_get_data(village_name: str):
+@app.get("/api/get_data", response_model=Union[EDAResponseData,FrontendResponseModel],tags=["EDA Response"],dependencies=[Depends(JWTBearer())])
+def api_get_data(village_name: str,user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
+    roles=get_role(user_credentials)
+    if roles!= "GOVTOff":
+        response_result["message"]=["Not authorized"]
+        return response_result
     try:
         response_data = fetch_from_db(response_result, village_name)
         return response_data["data"]
@@ -75,13 +80,25 @@ def api_get_data(village_name: str):
         print("Exception :", e)
         return 422
 
-@app.get("/api/get_familydata",response_model=FrontendResponseModel)
-def api_get_familydata(village_name:str,respondents_id: str):
+@app.get("/api/get_familydata",response_model=FrontendResponseModel,tags=["Frontend Response"],dependencies=[Depends(JWTBearer())])
+def api_get_familydata(respondents_id: str,user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
+
+    roles=get_role(user_credentials)
+    if roles == "user":
+        response_result["message"]=["Not authorized"]
+        return response_result
+
+    elif roles == "GOVTOff":
+        response_result["message"]=["Wrong endpoint"]
+        return response_result     
+
+    village_name=get_current_user_credentials(user_credentials).village_name
+
     try:
         familydata=fetch_familydata(response_result, village_name,respondents_id)
         response_result['data']=familydata["data"]
@@ -93,13 +110,25 @@ def api_get_familydata(village_name:str,respondents_id: str):
         print("Exception :", e)
         return response_result
 
-@app.get("/api/get_individual_data",response_model=FrontendResponseModel)
-def api_get_individual_data(village_name:str,respondents_id: str):
+@app.get("/api/get_individual_data",response_model=FrontendResponseModel,tags=["Frontend Response"],dependencies=[Depends(JWTBearer())])
+def api_get_individual_data(respondents_id: str,user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
+
+    roles=get_role(user_credentials)
+    if roles == "user":
+        response_result["message"]=["Not authorized"]
+        return response_result
+
+    elif roles == "GOVTOff":
+        response_result["message"]=["Wrong endpoint"]
+        return response_result     
+
+    village_name=get_current_user_credentials(user_credentials).village_name
+
     try:
         indivdualdata=fetch_individualdata(response_result, village_name,respondents_id)
         response_result['data']=indivdualdata
@@ -111,13 +140,19 @@ def api_get_individual_data(village_name:str,respondents_id: str):
         print("Exception :", e)
         return response_result
 
-@app.post('/signup', summary="Create new user", response_model=FrontendResponseModel)
-async def create_user(data: UserAuth):
+@app.post('/signup', summary="Create new user", response_model=FrontendResponseModel,tags=["Auth"],dependencies=[Depends(JWTBearer())])
+async def create_user(data: UserAuth,user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
+
+    roles=get_role(user_credentials)
+    if roles == "user":
+        response_result["message"]=["Not authorized"]
+        return response_result
+        
     try:
         signup(response_result,data)
         return response_result
@@ -128,7 +163,7 @@ async def create_user(data: UserAuth):
         return response_result
 
 
-@app.post('/login', summary="Log-in to the user account", response_model=TokenSchema)
+@app.post('/login', summary="Log-in to the user account", response_model=TokenSchema,tags=["Auth"])
 async def login(form_data: UserAuth = Depends()):
     tokens = {
         "status": "Internal Server Error 505",
@@ -145,9 +180,8 @@ async def login(form_data: UserAuth = Depends()):
         return tokens
 
 
-@app.get('/me', summary='Get details of currently logged in user', response_model=UserOut)
+@app.get('/me', summary='Get details of currently logged in user', response_model=UserOut,tags=["SessionInfo"])
 async def get_me(user: str = Depends(JWTBearer())):
-    print(user, "ssss", type(user))
     data = get_current_user_credentials(user)
-    print(data)
     return data
+
