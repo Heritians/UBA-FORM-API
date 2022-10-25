@@ -9,7 +9,7 @@ env:
   ADMIN_VILLAGE_NAME: ${{ secrets.ADMIN_VILLAGE_NAME }}
   ADMIN_ROLE: ${{ secrets.ADMIN_ROLE }}
   OWNER_ROLE: ${{ secrets.OWNER_ROLE }}
-  USER_ID: ${{ secrets.USER_ID }}
+  USER_ROLE: ${{ secrets.USER_ROLE}}
 
 on:
   push:

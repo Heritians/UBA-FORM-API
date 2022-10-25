@@ -13,7 +13,7 @@ class MyGetTestCase(unittest.TestCase):
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['OWNER_role']}"
+            "role": f"{os.environ['OWNER_ROLE']}"
         }
         params = {"village_name": "Sehore"}
         headers = {
@@ -30,7 +30,7 @@ class MyGetTestCase(unittest.TestCase):
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['ADMIN_role']}"
+            "role": f"{os.environ['ADMIN_ROLE']}"
         }
         params = {"village_name": "None"}
         headers = {
@@ -46,7 +46,7 @@ class MyGetTestCase(unittest.TestCase):
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['USER_role']}"
+            "role": f"{os.environ['USER_ROLE']}"
         }
         params = {"village_name": "None"}
         headers = {
