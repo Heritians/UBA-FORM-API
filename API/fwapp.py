@@ -150,7 +150,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
         response_result["message"] = ["Wrong endpoint"]
         return response_result
 
-    village_name = get_current_user_credentials(user_credentials)['village_name']
+    village_name = get_current_user_credentials(user_credentials)["village_name"]
 
     try:
         indivdualdata = fetch_individualdata(response_result, village_name, respondents_id)
@@ -180,6 +180,9 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
         return response_result
 
     try:
+        if data.role=="GOVTOff":
+            response_result["message"] = ["Not authorized"]
+            return response_result            
         signup(response_result, data)
         return response_result
 
