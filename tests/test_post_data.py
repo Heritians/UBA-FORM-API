@@ -13,7 +13,7 @@ class MyTestCase(unittest.TestCase):
     "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
     "password": f"{os.environ['ADMIN_PWD']}",
     "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-    "role": f"{os.environ['ADMIN_role']}"
+    "role": f"{os.environ['ADMIN_ROLE']}"
   }
 
 
