@@ -63,22 +63,33 @@ def api_post_data(responses: FormData):
 
 
 @app.get("/api/get_data", response_model=Union[EDAResponseData,FrontendResponseModel],tags=["EDA Response"],dependencies=[Depends(JWTBearer())])
-def api_get_data(village_name: str,user_credentials:str = Depends(JWTBearer())):
+def api_get_data(village_name: str, user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
-    roles=get_role(user_credentials)
-    if roles!= "GOVTOff":
-        response_result["message"]=["Not authorized"]
-        return response_result
     try:
-        response_data = fetch_from_db(response_result, village_name)
+        roles = get_role(user_credentials)
+        user_creds = get_current_user_credentials(user_credentials)
+
+        if roles == "user":
+            response_result["message"]=["Not authorized"]
+            return response_result
+
+        if roles == 'admin':
+            response_data = fetch_from_db(response_result, user_creds['village_name'])
+        else:
+            if village_name not in [db_names for db_names in DBConnection.get_client().list_database_names() if
+                                 db_names not in ['Auth', 'string']]:
+                raise ValueError("VillageName not found")
+            response_data = fetch_from_db(response_result, village_name)
         return response_data["data"]
     except Exception as e:
         print("Exception :", e)
-        return 422
+        response_result["status"] = "500"
+        response_result["message"] = ["Internal Server Error"]
+        return response_result
 
 @app.get("/api/get_familydata",response_model=FrontendResponseModel,tags=["Frontend Response"],dependencies=[Depends(JWTBearer())])
 def api_get_familydata(respondents_id: str,user_credentials:str = Depends(JWTBearer())):
@@ -95,7 +106,7 @@ def api_get_familydata(respondents_id: str,user_credentials:str = Depends(JWTBea
 
     elif roles == "GOVTOff":
         response_result["message"]=["Wrong endpoint"]
-        return response_result     
+        return response_result
 
     village_name=get_current_user_credentials(user_credentials).village_name
 
