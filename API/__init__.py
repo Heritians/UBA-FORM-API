@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 from API.utils.DBConnection import DBConnection
-# from dotenv import load_dotenv
-# load_dotenv()
 
-
-app = FastAPI()
+app = FastAPI(title="Connecting Villages API",version="V0.1.0",description="API for Connecting Villages")
 
 from API import fwapp
 
