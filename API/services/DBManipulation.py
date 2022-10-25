@@ -40,7 +40,7 @@ def commit_to_db(response_result: dict, form_data: FormData):
 
     if db in DBConnection.get_client().list_database_names() and len(list(cursor))!=0 :
         response_result['status'] = 'abort'
-        response_result['message'].append('Respondent Already exists')
+        response_result['message']=['Respondent Already exists']
 
     else:
 

@@ -8,6 +8,7 @@ def get_access_token(data):
         "accept":"application/json",
    } 
     response = requests.post(url, params=data,headers=headers)
+    print(response.json())
     access_token=response.json()['access_token']
     return access_token
 
