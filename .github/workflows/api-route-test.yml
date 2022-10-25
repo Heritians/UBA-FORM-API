@@ -3,11 +3,19 @@
 
 name: Python application
 
+env:
+  ADMIN_ID: ${{ secrets.ADMIN_ID }}
+  ADMIN_PWD: ${{ secrets.ADMIN_PWD }}
+  ADMIN_VILLAGE_NAME: ${{ secrets.ADMIN_VILLAGE_NAME }}
+  ADMIN_ROLE: ${{ secrets.ADMIN_ROLE }}
+  OWNER_ROLE: ${{ secrets.OWNER_ROLE }}
+  USER_ROLE: ${{ secrets.USER_ROLE}}
+
 on:
   push:
-    branches: [ "prod1" ]
+    branches: [ "main", "prod" ]
   pull_request:
-    branches: [ "prod1" ]
+    branches: [ "prod" ]
 
 permissions:
   contents: read

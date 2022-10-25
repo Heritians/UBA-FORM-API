@@ -1,21 +1,19 @@
 import os
 import unittest
 import requests
-from dotenv import load_dotenv
-load_dotenv()
-from login_utils import get_access_token
+from login_utils import get_access_token, BASE_URL
 
 
 
 class MyGetTestCase(unittest.TestCase):
-    url = "http://127.0.0.1:8000/api/get_data"
+    url = BASE_URL + "/api/get_data"
 
     def test_get_fromdb_owner(self):
         signincred = {
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['OWNER_role']}"
+            "role": f"{os.environ['OWNER_ROLE']}"
         }
         params = {"village_name": "Sehore"}
         headers = {
@@ -32,7 +30,7 @@ class MyGetTestCase(unittest.TestCase):
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['ADMIN_role']}"
+            "role": f"{os.environ['ADMIN_ROLE']}"
         }
         params = {"village_name": "None"}
         headers = {
@@ -48,7 +46,7 @@ class MyGetTestCase(unittest.TestCase):
             "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
             "password": f"{os.environ['ADMIN_PWD']}",
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-            "role": f"{os.environ['USER_role']}"
+            "role": f"{os.environ['USER_ROLE']}"
         }
         params = {"village_name": "None"}
         headers = {
