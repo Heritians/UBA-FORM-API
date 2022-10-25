@@ -5,11 +5,11 @@ import unittest
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from login_utils import get_access_token, data
+from login_utils import get_access_token, data, BASE_URL
 
 
 class MyTestCase(unittest.TestCase):
-  url="http://127.0.0.1:8000/api/post_data"
+  url= BASE_URL + "/api/post_data"
 
   signincred = {
     "AADHAR_NO": f"{os.environ['ADMIN_ID']}",

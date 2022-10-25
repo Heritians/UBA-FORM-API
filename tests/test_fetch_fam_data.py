@@ -4,11 +4,11 @@ import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-from login_utils import get_access_token
+from login_utils import get_access_token, BASE_URL
 
 
 class TestFetchFamilyData(unittest.TestCase):
-    url = "http://127.0.0.1:8000/api/get_familydata"
+    url = BASE_URL + "/api/get_familydata"
 
     params = {"respondents_id": "305040848937547"}
 

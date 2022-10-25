@@ -5,11 +5,11 @@ import unittest
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from login_utils import get_access_token
+from login_utils import get_access_token, BASE_URL
 
   #only admin can signup new users  
 class MySignupTestCase(unittest.TestCase):
-    url="http://127.0.0.1:8000/signup"
+    url= BASE_URL + "/signup"
     signincred = {
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",

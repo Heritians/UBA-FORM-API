@@ -3,12 +3,12 @@ import unittest
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from login_utils import get_access_token
+from login_utils import get_access_token, BASE_URL
 
 
 
 class MyGetTestCase(unittest.TestCase):
-    url = "http://127.0.0.1:8000/api/get_data"
+    url = BASE_URL + "/api/get_data"
 
     def test_get_fromdb_owner(self):
         signincred = {

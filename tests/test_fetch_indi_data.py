@@ -3,11 +3,11 @@ import unittest
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from login_utils import get_access_token
+from login_utils import get_access_token, BASE_URL
 
 
 class TestFetchIndividualData(unittest.TestCase):
-    url = "http://127.0.0.1:8000/api/get_individual_data"
+    url = BASE_URL + "/api/get_individual_data"
 
     signincred = {
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
