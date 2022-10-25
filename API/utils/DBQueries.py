@@ -79,7 +79,6 @@ class DBQueries:
             if cols=="meta":
                 continue
             mycol = mydb[cols]
-            # print(mycol)
             li = [docs for docs in cls.filtered_db_search(db_name,cols,['__id','_id'],__id=__id)]
             response_data["data"].update({mycol.full_name.split('.')[-1]: li})
         return response_data

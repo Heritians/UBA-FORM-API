@@ -93,6 +93,13 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
 
         return response_result
 
+    except ValueError as e:
+        response_result['status'] = 'abort'
+        response_result['message'][0] = 'authenticated'
+        response_result['message'].append('no such village exists in the database')
+        print("Exception :", e)
+        return response_result
+
     except Exception as e:
         print("Exception :", e)
         response_result["status"] = "500"
@@ -124,6 +131,14 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
         familydata = fetch_familydata(response_result, village_name, respondents_id)
         response_result['data'] = familydata["data"]
         response_result['status'] = 'success'
+        response_result['message'] = ['Authenticated']
+        return response_result
+
+    except IndexError as e:
+        response_result['status'] = 'abort'
+        response_result['message'][0] = 'authenticated'
+        response_result['message'].append('family with this respondent id does not exist in the database')
+        print("Exception :", e)
         return response_result
 
     except Exception as e:
@@ -159,6 +174,13 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
         response_result['message'] = ['Authenticated']
         return response_result
 
+    except IndexError as e:
+        response_result['status'] = 'abort'
+        response_result['message'][0] = 'authenticated'
+        response_result['message'].append('person with this id does not exist in the database')
+        print("Exception :", e)
+        return response_result
+
     except Exception as e:
         response_result['status'] = 'error'
         print("Exception :", e)
@@ -175,14 +197,25 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
     }
 
     roles = get_role(user_credentials)
+    current_user = get_current_user_credentials(user_credentials)
+    if data.role not in ['admin', 'user']:
+        response_result["message"] = ["Not authorized"]
+        return response_result
+
     if roles == "user":
         response_result["message"] = ["Not authorized"]
         return response_result
 
+    if data.role == 'admin' and roles == 'admin':
+        response_result["message"] = ["Not authorized"]
+        return response_result
+
+    if roles == "admin" and data.village_name != current_user['village_name']:
+        response_result["message"] = ["Not authorized"]
+        return response_result
+
     try:
-        if data.role=="GOVTOff":
-            response_result["message"] = ["Not authorized"]
-            return response_result            
+
         signup(response_result, data)
         return response_result
 
