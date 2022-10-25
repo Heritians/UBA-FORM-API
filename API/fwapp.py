@@ -3,14 +3,12 @@ from API.services.DBManipulation import *
 from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
 from .models.FrontendResponseSchema import FrontendResponseModel
-from .models.EDAResponseSchema import EDAResponseData
 from .models.AuthSchema import UserAuth, TokenSchema, UserOut
 from .utils.JWTBearer import JWTBearer
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
-from typing import Union
 
 
 # template and static files setup
@@ -62,7 +60,7 @@ def api_post_data(responses: FormData):
         return response_result
 
 
-@app.get("/api/get_data", response_model=Union[EDAResponseData,FrontendResponseModel],tags=["EDA Response"],dependencies=[Depends(JWTBearer())])
+@app.get("/api/get_data", response_model=FrontendResponseModel,tags=["EDA Response"],dependencies=[Depends(JWTBearer())])
 def api_get_data(village_name: str, user_credentials:str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
@@ -77,14 +75,23 @@ def api_get_data(village_name: str, user_credentials:str = Depends(JWTBearer()))
             response_result["message"]=["Not authorized"]
             return response_result
 
+        response_data = None
         if roles == 'admin':
             response_data = fetch_from_db(response_result, user_creds['village_name'])
+
         else:
+
             if village_name not in [db_names for db_names in DBConnection.get_client().list_database_names() if
                                  db_names not in ['Auth', 'string']]:
                 raise ValueError("VillageName not found")
             response_data = fetch_from_db(response_result, village_name)
-        return response_data["data"]
+
+        response_result['data'] = response_data['data']
+        response_result['status'] = 'success'
+        response_result['message'] = ['authorized']
+
+        return response_result
+
     except Exception as e:
         print("Exception :", e)
         response_result["status"] = "500"

@@ -5,7 +5,7 @@ import unittest
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from login_utils import get_access_token, query_get, query_post,data
+from login_utils import get_access_token, data
 
 
 class MyTestCase(unittest.TestCase):
