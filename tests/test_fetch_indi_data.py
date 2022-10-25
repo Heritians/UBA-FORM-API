@@ -1,8 +1,6 @@
 import os
 import unittest
 import requests
-from dotenv import load_dotenv
-load_dotenv()
 from login_utils import get_access_token, BASE_URL
 
 

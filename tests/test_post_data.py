@@ -3,8 +3,6 @@ import random
 import json
 import unittest
 import requests
-from dotenv import load_dotenv
-load_dotenv()
 from login_utils import get_access_token, data, BASE_URL
 
 
