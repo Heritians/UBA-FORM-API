@@ -26,7 +26,6 @@ class MyTestCase(unittest.TestCase):
     }
     dumpdata=json.dumps(data)
     response = requests.post(MyTestCase.url, data=dumpdata,headers=headers)
-    print(response.json())
     self.assertEqual(response.json()['status'], 'abort')  # add assertion here
 
   def test_post2db_new(self):
