@@ -129,9 +129,4 @@ def fetch_individualdata(response_result: dict,db_name:str,respondent_id:str):
     return result
 
 def get_db_conn_flag():
-    return DBConnection.flag   
-
-      
-
-
-    
+    return DBConnection.flag
