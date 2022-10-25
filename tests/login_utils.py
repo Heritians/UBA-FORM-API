@@ -229,4 +229,4 @@ data={
     ]
   }
 }
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://ubaformapi-b79iq4w6b-fastapis-build.vercel.app"
