@@ -9,54 +9,42 @@ class TestFetchFamilyData(unittest.TestCase):
 
     params = {"respondents_id": "305040848937547"}
 
-    
-
-    def test_owner(self):
-        signincred = {
+    signincred = {
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
         "role": f"{os.environ['OWNER_ROLE']}"
         }
-        signincred['role'] = os.environ['OWNER_ROLE']
+
+    def test_owner(self):
+        
+        TestFetchFamilyData.signincred['role'] = os.environ['OWNER_ROLE']
 
         headers = {
             "accept": "application/json",
-            "Authorization": f"Bearer {get_access_token(signincred)}",
+            "Authorization": f"Bearer {get_access_token(TestFetchFamilyData.signincred)}",
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchFamilyData.url, params=TestFetchFamilyData.params, headers=headers)
         self.assertEqual(response.json()['message'], ['Wrong endpoint'])
 
     def test_admin(self):
-        signincred = {
-        "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
-        "password": f"{os.environ['ADMIN_PWD']}",
-        "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['OWNER_ROLE']}"
-        }
-        signincred['role'] = os.environ['ADMIN_ROLE']
+        TestFetchFamilyData.signincred['role'] = os.environ['ADMIN_ROLE']
 
         headers = {
             "accept": "application/json",
-            "Authorization": f"Bearer {get_access_token(signincred)}",
+            "Authorization": f"Bearer {get_access_token(TestFetchFamilyData.signincred)}",
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchFamilyData.url, params=TestFetchFamilyData.params, headers=headers)
         self.assertEqual(response.json()['status'], "success")
 
     def test_user(self):
-        signincred = {
-        "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
-        "password": f"{os.environ['ADMIN_PWD']}",
-        "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['OWNER_ROLE']}"
-        }
-        signincred['role'] = os.environ['USER_ROLE']
+        TestFetchFamilyData.signincred['role'] = os.environ['USER_ROLE']
 
         headers = {
             "accept": "application/json",
-            "Authorization": f"Bearer {get_access_token(signincred)}",
+            "Authorization": f"Bearer {get_access_token(TestFetchFamilyData.signincred)}",
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchFamilyData.url, params=TestFetchFamilyData.params, headers=headers)
