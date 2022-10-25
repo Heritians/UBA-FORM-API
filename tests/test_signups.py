@@ -8,18 +8,19 @@ from login_utils import get_access_token, BASE_URL
   #only admin can signup new users  
 class MySignupTestCase(unittest.TestCase):
     url= BASE_URL + "/signup"
-    
-    def test_signup_owner_existing_account(self):
-        signincred = {
+    signincred = {
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
         "role": f"{os.environ['ADMIN_ROLE']}"
         }
-        signincred["role"]=os.environ['OWNER_ROLE']
+    
+    def test_signup_owner_existing_account(self):
+        
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
         headers={
         "accept":"application/json",
-        "Authorization":f"Bearer {get_access_token(signincred)}",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
         "Content-Type":"application/json"
         }
         signupcredexist={
@@ -33,16 +34,10 @@ class MySignupTestCase(unittest.TestCase):
         self.assertEqual(response.json()['status'], 'failed')
 
     def test_signup_owner_new_account(self):
-        signincred = {
-        "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
-        "password": f"{os.environ['ADMIN_PWD']}",
-        "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['ADMIN_ROLE']}"
-        }
-        signincred["role"]=os.environ['OWNER_ROLE']
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
         headers={
         "accept":"application/json",
-        "Authorization":f"Bearer {get_access_token(signincred)}",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
         "Content-Type":"application/json"
         }
         signupcrednewowner={
@@ -56,16 +51,10 @@ class MySignupTestCase(unittest.TestCase):
         self.assertEqual(response.json()['status'], 'success')    
 
     def test_signup_admin(self):
-        signincred = {
-        "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
-        "password": f"{os.environ['ADMIN_PWD']}",
-        "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['ADMIN_ROLE']}"
-        }
-        signincred["role"]=os.environ['ADMIN_ROLE']
+        MySignupTestCase.signincred["role"]=os.environ['ADMIN_ROLE']
         headers={
         "accept":"application/json",
-        "Authorization":f"Bearer {get_access_token(signincred)}",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
         "Content-Type":"application/json"
         }
         signupcredadmin={
@@ -79,16 +68,10 @@ class MySignupTestCase(unittest.TestCase):
         self.assertEqual(response.json()['status'], 'success') 
 
     def test_signup_user(self):
-        signincred = {
-        "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
-        "password": f"{os.environ['ADMIN_PWD']}",
-        "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['ADMIN_ROLE']}"
-        }
-        signincred["role"]=os.environ['USER_ROLE']
+        MySignupTestCase.signincred["role"]=os.environ['USER_ROLE']
         headers={
         "accept":"application/json",
-        "Authorization":f"Bearer {get_access_token(signincred)}",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
         "Content-Type":"application/json"
         }
         signupcreduser={
