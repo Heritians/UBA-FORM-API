@@ -40,7 +40,8 @@ def commit_to_db(response_result: dict, form_data: FormData):
 
     if db in DBConnection.get_client().list_database_names() and len(list(cursor))!=0 :
         response_result['status'] = 'abort'
-        response_result['message']=['Respondent Already exists']
+        response_result['message'][0] = 'authenticated'
+        response_result['message'].append('person(respondent) with this id already exists in the database')
 
     else:
 
@@ -112,6 +113,8 @@ def commit_to_db(response_result: dict, form_data: FormData):
         DBQueries.insert_to_database(db, collection_names['mp'], data)
 
         response_result['status'] = 'success'
+        response_result['message'][0] = 'authenticated'
+        response_result['message'].append('posted successfully')
 
 
 def fetch_from_db(response_result: dict,resp_data:str):

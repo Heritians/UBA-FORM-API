@@ -23,6 +23,10 @@ class Auth:
     def verify_password(cls, plain_password, hashed_password):
         return cls.pwd_context.verify(plain_password, hashed_password)
 
+    @classmethod
+    def verify_village_name(cls, entered_village_name, db_village_name):
+        return entered_village_name == db_village_name
+
     @staticmethod    
     def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> str:
         if expires_delta is not None:

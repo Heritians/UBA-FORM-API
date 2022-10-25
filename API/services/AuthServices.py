@@ -12,7 +12,9 @@ def signup(response_result, data: UserAuth):
     user = DBQueries.filtered_db_search("Auth", data.role, [], AADHAR=data.AADHAR_NO)
     if len(list(user)) != 0:
         response_result['status'] = f'failed'
-        response_result['message'].append(f'User with this AADHAR NO already exist')
+        response_result['message'].append(f'user with this AADHAR Number already has an account')
+        response_result['message'][0] = 'authenticated'
+
     else:
         userinfo = {
             'AADHAR': data.AADHAR_NO,
@@ -31,7 +33,8 @@ def user_login(tokens, form_data: UserAuth):
         tokens['status'] = 'login failed'
     else:
 
-        if not Auth.verify_password(form_data.password, data[0]['password']):
+        if not Auth.verify_password(form_data.password, data[0]['password']) or \
+               not Auth.verify_village_name(form_data.village_name, data[0]['village_name']):
             tokens['status'] = 'login failed'
 
         else:
