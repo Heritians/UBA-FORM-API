@@ -12,11 +12,11 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['ADMIN_role']}"
+        "role": f"{os.environ['ADMIN_ROLE']}"
         }
     
     def test_signup_owner_existing_account(self):
-        MySignupTestCase.signincred["role"]=os.environ['OWNER_role']
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
         headers={
         "accept":"application/json",
         "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
@@ -26,14 +26,14 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['USER_role']}"
+        "role": f"{os.environ['USER_ROLE']}"
         }
         signupcredexistowner=json.dumps(signupcredexist)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredexistowner)
         self.assertEqual(response.json()['status'], 'failed')
 
     def test_signup_owner_new_account(self):
-        MySignupTestCase.signincred["role"]=os.environ['OWNER_role']
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
         headers={
         "accept":"application/json",
         "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
@@ -43,14 +43,14 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": random.randint(1,1000000000000000),
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['USER_role']}"
+        "role": f"{os.environ['USER_ROLE']}"
         }
         signupcredowner=json.dumps(signupcrednewowner)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredowner)
         self.assertEqual(response.json()['status'], 'success')    
 
     def test_signup_admin(self):
-        MySignupTestCase.signincred["role"]=os.environ['ADMIN_role']
+        MySignupTestCase.signincred["role"]=os.environ['ADMIN_ROLE']
         headers={
         "accept":"application/json",
         "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
@@ -60,14 +60,14 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": random.randint(1,1000000000000000),
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['ADMIN_role']}"
+        "role": f"{os.environ['ADMIN_ROLE']}"
         }
         signupcredadmin=json.dumps(signupcredadmin)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredadmin)
         self.assertEqual(response.json()['status'], 'success') 
 
     def test_signup_user(self):
-        MySignupTestCase.signincred["role"]=os.environ['USER_role']
+        MySignupTestCase.signincred["role"]=os.environ['USER_ROLE']
         headers={
         "accept":"application/json",
         "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
@@ -77,7 +77,7 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['OWNER_role']}"
+        "role": f"{os.environ['OWNER_ROLE']}"
         }
         signupcreduser=json.dumps(signupcreduser)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcreduser)
@@ -88,7 +88,7 @@ class MySignupTestCase(unittest.TestCase):
         "AADHAR_NO": f"{os.environ['ADMIN_ID']}",
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
-        "role": f"{os.environ['OWNER_role']}"
+        "role": f"{os.environ['OWNER_ROLE']}"
         }
         signupcred=json.dumps(signupcred)
         response=requests.post(MySignupTestCase.url,data=signupcred)
