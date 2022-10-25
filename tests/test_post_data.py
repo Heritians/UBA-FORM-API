@@ -19,6 +19,7 @@ class MyTestCase(unittest.TestCase):
   }
 
 
+
   def test_post2db_existing(self):
     headers={
     "accept":"application/json",
@@ -49,8 +50,11 @@ class MyTestCase(unittest.TestCase):
       "Content-Type":"application/json"}
     dumpdata=json.dumps(data) 
     response = requests.post(MyTestCase.url, data=dumpdata,headers=headers)
-    print(response.status_code)
     self.assertEqual(response.status_code, 403)  # add assertion here
+
+
+
+ 
 
 
 
