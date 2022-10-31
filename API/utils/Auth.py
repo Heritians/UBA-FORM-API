@@ -1,4 +1,6 @@
-# import os
+"""Utility class to leverage encryption, verification of entered credentials
+and generation of JWT access tokens.
+"""
 from datetime import datetime, timedelta
 from typing import Union, Any
 
@@ -13,6 +15,14 @@ REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 
 
 class Auth:
+    """Utility class to perform -  1.encryption via `bcrypt` scheme.
+    2.password hashing 3.verification of credentials and generating
+    access tokens.
+
+    Attrs:
+        pwd_context: CryptContext. Helper for hashing & verifying passwords
+                                   using `bcrypt` algorithm.
+    """
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     @classmethod

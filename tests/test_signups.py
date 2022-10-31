@@ -31,7 +31,7 @@ class MySignupTestCase(unittest.TestCase):
         }
         signupcredexistowner=json.dumps(signupcredexist)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredexistowner)
-        self.assertEqual(response.json()['status'], 'failed')
+        self.assertEqual(response.status_code, 226)
 
     def test_signup_owner_new_account(self):
         MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
@@ -51,7 +51,7 @@ class MySignupTestCase(unittest.TestCase):
         self.assertEqual(response.json()['status'], 'success')    
 
     def test_signup_admin(self):
-        MySignupTestCase.signincred["role"]=os.environ['ADMIN_ROLE']
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
         headers={
         "accept":"application/json",
         "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
@@ -65,7 +65,7 @@ class MySignupTestCase(unittest.TestCase):
         }
         signupcredadmin=json.dumps(signupcredadmin)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredadmin)
-        self.assertEqual(response.json()['status'], 'success') 
+        self.assertEqual(response.json()['status'], 'success')
 
     def test_signup_user(self):
         MySignupTestCase.signincred["role"]=os.environ['USER_ROLE']
@@ -82,7 +82,7 @@ class MySignupTestCase(unittest.TestCase):
         }
         signupcreduser=json.dumps(signupcreduser)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcreduser)
-        self.assertEqual(response.json()['status'], 'not_allowed')
+        self.assertEqual(response.status_code, 401)
 
     def test_unauth(self):  
         signupcred={

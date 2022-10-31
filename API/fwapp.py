@@ -2,9 +2,11 @@ from API import app
 from API.services.DBManipulation import *
 from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
-from .models.FrontendResponseSchema import FrontendResponseModel
 from .models.AuthSchema import UserAuth, TokenSchema, UserOut
 from .utils.JWTBearer import JWTBearer
+from .utils import scopes
+from .core.ExceptionHandlers import *
+from .core.Exceptions import *
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
@@ -51,13 +53,9 @@ def api_post_data(responses: FormData):
         "message": ["Not authenticated"],
         "data": {},
     }
-    try:
-        commit_to_db(response_result, responses)
-        return response_result
-    except Exception as e:
-        response_result['status'] = 'error'
-        print("Exception :", e)
-        return response_result
+
+    commit_to_db(response_result, responses)
+    return response_result
 
 
 @app.get("/api/get_data", response_model=FrontendResponseModel, tags=["EDA Response"],
@@ -68,43 +66,25 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
         "message": ["Not authenticated"],
         "data": {},
     }
-    try:
-        roles = get_role(user_credentials)
-        user_creds = get_current_user_credentials(user_credentials)
+    roles = get_role(user_credentials)
+    user_creds = get_current_user_credentials(user_credentials)
 
-        if roles == "user":
-            response_result["message"] = ["Not authorized"]
-            return response_result
-
-        response_data = None
+    @scopes.init_checks(authorized_roles=["admin", "GOVTOff"], village_name=village_name,
+                        response_result=response_result)
+    def scoped_checks(roles: str, user_creds: UserOut):
         if roles == 'admin':
             response_data = fetch_from_db(response_result, user_creds['village_name'])
-
         else:
-
-            if village_name not in [db_names for db_names in DBConnection.get_client().list_database_names() if
-                                    db_names not in ['Auth', 'string']]:
-                raise ValueError("VillageName not found")
             response_data = fetch_from_db(response_result, village_name)
+        return response_data['data']
 
-        response_result['data'] = response_data['data']
-        response_result['status'] = 'success'
-        response_result['message'] = ['authorized']
+    response_data = scoped_checks(roles, user_creds)
 
-        return response_result
+    response_result['data'] = response_data
+    response_result['status'] = 'success'
+    response_result['message'] = ['authorized']
 
-    except ValueError as e:
-        response_result['status'] = 'abort'
-        response_result['message'][0] = 'authenticated'
-        response_result['message'].append('no such village exists in the database')
-        print("Exception :", e)
-        return response_result
-
-    except Exception as e:
-        print("Exception :", e)
-        response_result["status"] = "500"
-        response_result["message"] = ["Internal Server Error"]
-        return response_result
+    return response_result
 
 
 @app.get("/api/get_familydata", response_model=FrontendResponseModel, tags=["Frontend Response"],
@@ -117,34 +97,21 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
     }
 
     roles = get_role(user_credentials)
-    if roles == "user":
-        response_result["message"] = ["Not authorized"]
-        return response_result
+    creds = get_current_user_credentials(user_credentials)
 
-    elif roles == "GOVTOff":
-        response_result["message"] = ["Wrong endpoint"]
-        return response_result
+    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+                        village_name=creds['village_name'], response_result=response_result)
+    def scoped_checks(roles: str, user_creds: UserOut):
+        pass
 
-    village_name = get_current_user_credentials(user_credentials)['village_name']
+    scoped_checks(roles, creds)
 
-    try:
-        familydata = fetch_familydata(response_result, village_name, respondents_id)
-        response_result['data'] = familydata["data"]
-        response_result['status'] = 'success'
-        response_result['message'] = ['Authenticated']
-        return response_result
+    familydata = fetch_familydata(response_result, creds['village_name'], respondents_id)
 
-    except IndexError as e:
-        response_result['status'] = 'abort'
-        response_result['message'][0] = 'authenticated'
-        response_result['message'].append('family with this respondent id does not exist in the database')
-        print("Exception :", e)
-        return response_result
-
-    except Exception as e:
-        response_result['status'] = 'error'
-        print("Exception :", e)
-        return response_result
+    response_result['data'] = familydata["data"]
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated']
+    return response_result
 
 
 @app.get("/api/get_individual_data", response_model=FrontendResponseModel, tags=["Frontend Response"],
@@ -157,34 +124,21 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
     }
 
     roles = get_role(user_credentials)
-    if roles == "user":
-        response_result["message"] = ["Not authorized"]
-        return response_result
+    creds = get_current_user_credentials(user_credentials)
 
-    elif roles == "GOVTOff":
-        response_result["message"] = ["Wrong endpoint"]
-        return response_result
+    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+                        village_name=creds['village_name'], response_result=response_result)
+    def scoped_checks(roles: str, user_creds: UserOut):
+        pass
 
-    village_name = get_current_user_credentials(user_credentials)["village_name"]
+    scoped_checks(roles, creds)
 
-    try:
-        indivdualdata = fetch_individualdata(response_result, village_name, respondents_id)
-        response_result['data'] = indivdualdata
-        response_result['status'] = 'success'
-        response_result['message'] = ['Authenticated']
-        return response_result
+    indivdualdata = fetch_individualdata(response_result, creds['village_name'], respondents_id)
 
-    except IndexError as e:
-        response_result['status'] = 'abort'
-        response_result['message'][0] = 'authenticated'
-        response_result['message'].append('person with this id does not exist in the database')
-        print("Exception :", e)
-        return response_result
-
-    except Exception as e:
-        response_result['status'] = 'error'
-        print("Exception :", e)
-        return response_result
+    response_result['data'] = indivdualdata
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated']
+    return response_result
 
 
 @app.post('/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Auth"],
@@ -197,32 +151,24 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
     }
 
     roles = get_role(user_credentials)
-    current_user = get_current_user_credentials(user_credentials)
-    if data.role not in ['admin', 'user']:
-        response_result["message"] = ["Not authorized"]
-        return response_result
+    creds = get_current_user_credentials(user_credentials)
 
-    if roles == "user":
-        response_result["message"] = ["Not authorized"]
-        return response_result
+    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'],
+                        village_name=data.village_name, response_result=response_result)
+    def scoped_checks(roles: str, creds: UserOut):
+        if data.role not in ['admin', 'user']:
+            raise AuthorizationFailedException(response_result, "not authorized")
 
-    if data.role == 'admin' and roles == 'admin':
-        response_result["message"] = ["Not authorized"]
-        return response_result
+        if data.role == 'admin' and roles == 'admin':
+            raise AuthorizationFailedException(response_result, "not authorized")
 
-    if roles == "admin" and data.village_name != current_user['village_name']:
-        response_result["message"] = ["Not authorized"]
-        return response_result
+        if roles == "admin" and data.village_name != creds['village_name']:
+            raise AuthorizationFailedException(response_result, "not authorized")
 
-    try:
+    scoped_checks(roles, creds)
 
-        signup(response_result, data)
-        return response_result
-
-    except Exception as e:
-        response_result['status'] = 'error'
-        print("Exception :", e)
-        return response_result
+    signup(response_result, data)
+    return response_result
 
 
 @app.post('/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Auth"])
@@ -233,13 +179,8 @@ async def login(form_data: UserAuth = Depends()):
         "refresh_token": "",
         "role": "unauthorized"
     }
-    try:
-        user_login(tokens, form_data)
-        return tokens
-
-    except Exception as e:
-        print("Exception :", e)
-        return tokens
+    user_login(tokens, form_data)
+    return tokens
 
 
 @app.get('/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
