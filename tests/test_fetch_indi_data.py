@@ -25,7 +25,7 @@ class TestFetchIndividualData(unittest.TestCase):
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchIndividualData.url, params=TestFetchIndividualData.params, headers=headers)
-        self.assertEqual(response.json()['message'], ['Wrong endpoint'])
+        self.assertEqual(response.status_code, 401)
 
     def test_admin(self):
         TestFetchIndividualData.signincred['role'] = os.environ['ADMIN_ROLE']
@@ -46,7 +46,7 @@ class TestFetchIndividualData(unittest.TestCase):
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchIndividualData.url, params=TestFetchIndividualData.params, headers=headers)
-        self.assertEqual(response.json()['message'], ["Not authorized"])
+        self.assertEqual(response.status_code, 401)
 
     def test_unauth(self):
         headers = {

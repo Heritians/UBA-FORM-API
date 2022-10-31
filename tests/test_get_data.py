@@ -4,7 +4,6 @@ import requests
 from login_utils import get_access_token, BASE_URL
 
 
-
 class MyGetTestCase(unittest.TestCase):
     url = BASE_URL + "/api/get_data"
 
@@ -21,9 +20,8 @@ class MyGetTestCase(unittest.TestCase):
             "Authorization": f"Bearer {get_access_token(signincred)}",
             "Content-Type": "application/json",
         }
-        response=requests.get(url=MyGetTestCase.url, params=params, headers=headers)
+        response = requests.get(url=MyGetTestCase.url, params=params, headers=headers)
         self.assertEqual(response.json()['status'], "success")
-
 
     def test_get_fromdb_admin(self):
         signincred = {
@@ -38,7 +36,7 @@ class MyGetTestCase(unittest.TestCase):
             "Authorization": f"Bearer {get_access_token(signincred)}",
             "Content-Type": "application/json",
         }
-        response=requests.get(url=MyGetTestCase.url, params=params, headers=headers)
+        response = requests.get(url=MyGetTestCase.url, params=params, headers=headers)
         self.assertEqual(response.json()['status'], "success")
 
     def test_get_fromdb_user(self):
@@ -54,8 +52,9 @@ class MyGetTestCase(unittest.TestCase):
             "Authorization": f"Bearer {get_access_token(signincred)}",
             "Content-Type": "application/json",
         }
-        response=requests.get(url=MyGetTestCase.url, params=params, headers=headers)
-        self.assertEqual(response.json()['status'], "not_allowed")
+        response = requests.get(url=MyGetTestCase.url, params=params, headers=headers)
+        self.assertEqual(response.status_code, 401)
 
-if __name__=="__main__":
-    unittest.main()        
+
+if __name__ == "__main__":
+    unittest.main()

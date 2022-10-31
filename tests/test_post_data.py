@@ -5,7 +5,6 @@ import unittest
 import requests
 from login_utils import get_access_token, data, BASE_URL
 
-
 class MyTestCase(unittest.TestCase):
   url= BASE_URL + "/api/post_data"
   signincred = {
@@ -24,7 +23,7 @@ class MyTestCase(unittest.TestCase):
     }
     dumpdata=json.dumps(data)
     response = requests.post(MyTestCase.url, data=dumpdata,headers=headers)
-    self.assertEqual(response.json()['status'], 'abort')  # add assertion here
+    self.assertEqual(response.status_code, 409)  # add assertion here
 
   def test_post2db_new(self):
     newdata=data

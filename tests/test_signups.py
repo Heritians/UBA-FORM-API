@@ -4,7 +4,8 @@ import json
 import unittest
 import requests
 from login_utils import get_access_token, BASE_URL
-
+from dotenv import load_dotenv
+load_dotenv()
   #only admin can signup new users  
 class MySignupTestCase(unittest.TestCase):
     url= BASE_URL + "/signup"
