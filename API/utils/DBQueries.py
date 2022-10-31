@@ -1,6 +1,8 @@
 import pymongo.cursor
 
 from .DBConnection import DBConnection
+from ..core.Exceptions import *
+
 # fix ObjectId & FastApi conflict
 import pydantic
 from bson.objectid import ObjectId
@@ -56,12 +58,16 @@ class DBQueries:
         
     #Allow frontend to query data of a particular family via respondents_id      
     @classmethod
-    def retrieve__id(cls, db_name, respondent_id):
+    def retrieve__id(cls, db_name, respondent_id, response_result):
         con = DBConnection.get_client()
         mydb = con[db_name]
         metacol = mydb['meta']
         respcol=mydb['respondent_prof']
         li = [docs for docs in metacol.find({"resp_id": respondent_id})]
+        if len(li) == 0:
+            raise InfoNotFoundException(response_result,
+                                        "family with this respondent id does not exist in the database")
+
         #get respondent_id from the meta collection
         resp_id=li[0]['resp_id']
         respli=[docs for docs in respcol.find({"id_no": resp_id})]
@@ -69,12 +75,12 @@ class DBQueries:
         return respli[0]['__id']
         
     @classmethod
-    def retrieve_documents_by_id(cls, db_name,respondent_id):
+    def retrieve_documents_by_id(cls, db_name,respondent_id, response_result):
         con = DBConnection.get_client()
         mydb = con[db_name]
         response_data = {}
         response_data["data"] = {}
-        __id=cls.retrieve__id(db_name,respondent_id)
+        __id=cls.retrieve__id(db_name,respondent_id, response_result)
         for cols in mydb.list_collection_names():
             if cols=="meta":
                 continue
@@ -95,8 +101,10 @@ class DBQueries:
         return cursor
 
     @classmethod
-    def fetch_indiv_document(cls,db_name,respondent_id):
+    def fetch_indiv_document(cls,db_name,respondent_id, response_result):
         indivdata = [docs for docs in cls.filtered_db_search(db_name,'fam_info',['__id','_id'],AADHAR_No=respondent_id)]
+        if len(indivdata) == 0:
+            raise InfoNotFoundException(response_result, "person with this id does not exist in the database")
         return indivdata[0]
 
         
