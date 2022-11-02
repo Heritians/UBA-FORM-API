@@ -2,7 +2,7 @@ from API import app
 from API.services.DBManipulation import *
 from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
-from .models.AuthSchema import UserAuth, TokenSchema, UserOut
+from .models.AuthSchema import UserAuth, TokenSchema, UserOut, UseRefreshToken
 from .utils.JWTBearer import JWTBearer
 from .utils import scopes
 from .core.ExceptionHandlers import *
@@ -18,7 +18,6 @@ app.mount("/static", StaticFiles(directory="API/static"), name="static")
 
 
 @app.get("/", tags=["Home"])
-@app.get("/home", tags=["Home"])
 def home(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
@@ -183,7 +182,13 @@ async def login(form_data: UserAuth = Depends()):
     return tokens
 
 
-@app.get('/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
-async def get_me(user: str = Depends(JWTBearer())):
-    data = get_current_user_credentials(user)
-    return data
+@app.post("/auth/use_refresh_token", summary="generate a fresh pair of access tokens using refresh tokens",
+          response_model=TokenSchema, tags=["Auth"], dependencies=[Depends(JWTBearer())])
+async def auth_use_refresh_token(existing_tokens: UseRefreshToken):
+    return handle_refresh_token_access(existing_tokens.refresh_access_token)
+
+
+# @app.get('/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
+# async def get_me(user: str = Depends(JWTBearer())):
+#     data = get_current_user_credentials(user)
+#     return data

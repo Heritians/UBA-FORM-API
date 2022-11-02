@@ -109,3 +109,7 @@ def get_role(token: str) -> str:
     token_data = TokenPayload(**payload)
     role = token_data.sub.split("_")[1]
     return role
+
+
+def handle_refresh_token_access(token: str) -> TokenSchema:
+    return Auth.generate_access_tokens_from_refresh_tokens(token)
