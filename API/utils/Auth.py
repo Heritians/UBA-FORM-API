@@ -6,8 +6,11 @@ from typing import Union, Any
 
 from jose import jwt
 from passlib.context import CryptContext
+from pydantic import ValidationError
 
 from ..core.ConfigEnv import settings
+from..core.Exceptions import *
+from ..models.AuthSchema import TokenPayload
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
@@ -58,3 +61,26 @@ class Auth:
         to_encode = {"exp": expires_delta, "sub": str(subject)}
         encoded_jwt = jwt.encode(to_encode, settings.JWT_REFRESH_SECRET_KEY, settings.ALGORITHM)
         return encoded_jwt
+
+    @staticmethod
+    def generate_access_tokens_from_refresh_tokens(token: str):
+        tokens = {
+            "status": "Internal Server Error 505",
+            "access_token": "",
+            "refresh_token": "",
+            "role": "unauthorized"
+        }
+        try:
+            payload = jwt.decode(
+                token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+            )
+            token_data = TokenPayload(**payload)
+        except (jwt.JWTError, ValidationError):
+            raise LoginFailedException(tokens)
+        tokens['access_token'] = Auth.create_access_token(token_data.sub)
+        tokens['refresh_token'] = Auth.create_refresh_token(token_data.sub)
+        tokens['status'] = 'login successful'
+        tokens['role'] = token_data.sub.split("_")[1]
+        return tokens
+
+
