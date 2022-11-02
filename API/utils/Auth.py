@@ -12,9 +12,11 @@ from ..core.ConfigEnv import settings
 from..core.Exceptions import *
 from ..models.AuthSchema import TokenPayload
 
+from fastapi.exceptions import HTTPException
+
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 3 # 3 days
 
 
 class Auth:
@@ -72,9 +74,11 @@ class Auth:
         }
         try:
             payload = jwt.decode(
-                token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+                token, settings.JWT_REFRESH_SECRET_KEY, algorithms=[settings.ALGORITHM]
             )
             token_data = TokenPayload(**payload)
+            if datetime.fromtimestamp(token_data.exp)< datetime.now():
+                raise HTTPException(status_code=403, detail="Invalid token or expired token.")
         except (jwt.JWTError, ValidationError):
             raise LoginFailedException(tokens)
         tokens['access_token'] = Auth.create_access_token(token_data.sub)
