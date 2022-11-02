@@ -22,7 +22,7 @@ def home(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
 
-@app.get("/api/response_check", response_model=FrontendResponseModel, tags=["Frontend Response"])
+@app.get("/api/response_check", response_model=FrontendResponseModel, tags=["Resource Server"])
 def api_response_check():
     response_result = {
         "status": "not_allowed",
@@ -45,7 +45,7 @@ def api_response_check():
 
 
 @app.post("/api/post_data", response_model=FrontendResponseModel, dependencies=[Depends(JWTBearer())],
-          tags=["Frontend Response"])
+          tags=["Resource Server"])
 def api_post_data(responses: FormData):
     response_result = {
         "status": "not_allowed",
@@ -57,8 +57,7 @@ def api_post_data(responses: FormData):
     return response_result
 
 
-@app.get("/api/get_data", response_model=FrontendResponseModel, tags=["EDA Response"],
-         dependencies=[Depends(JWTBearer())])
+@app.get("/api/get_data", response_model=FrontendResponseModel, tags=["Resource Server"],        dependencies=[Depends(JWTBearer())])
 def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
@@ -86,7 +85,7 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
     return response_result
 
 
-@app.get("/api/get_familydata", response_model=FrontendResponseModel, tags=["Frontend Response"],
+@app.get("/api/get_familydata", response_model=FrontendResponseModel, tags=["Resource Server"],
          dependencies=[Depends(JWTBearer())])
 def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTBearer())):
     response_result = {
@@ -113,7 +112,7 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
     return response_result
 
 
-@app.get("/api/get_individual_data", response_model=FrontendResponseModel, tags=["Frontend Response"],
+@app.get("/api/get_individual_data", response_model=FrontendResponseModel, tags=["Resource Server"],
          dependencies=[Depends(JWTBearer())])
 def api_get_individual_data(respondents_id: str, user_credentials: str = Depends(JWTBearer())):
     response_result = {
@@ -140,8 +139,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
     return response_result
 
 
-@app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Auth"],
-          dependencies=[Depends(JWTBearer())])
+@app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Authorization Server"],dependencies=[Depends(JWTBearer())])
 async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
@@ -170,7 +168,7 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
     return response_result
 
 
-@app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Auth"])
+@app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Authorization Server"])
 async def login(form_data: UserAuth = Depends()):
     tokens = {
         "status": "Internal Server Error 505",
@@ -183,7 +181,7 @@ async def login(form_data: UserAuth = Depends()):
 
 
 @app.post("/auth/use_refresh_token", summary="generate a fresh pair of access tokens using refresh tokens",
-          response_model=TokenSchema, tags=["Auth"], dependencies=[Depends(JWTBearer())])
+          response_model=TokenSchema, tags=["Authorization Server"], dependencies=[Depends(JWTBearer())])
 async def auth_use_refresh_token(existing_tokens: UseRefreshToken):
     return handle_refresh_token_access(existing_tokens.refresh_access_token)
 
