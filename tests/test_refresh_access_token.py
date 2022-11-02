@@ -22,7 +22,7 @@ class TestRefreshAccessToken(unittest.TestCase):
         "Content-Type":"application/json"
         }
         response = requests.post(TestRefreshAccessToken.url, headers=headers,data=json.dumps({"refresh_access_token":tokens[1]}))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
     def test_unauth(self):  
         response=requests.post(TestRefreshAccessToken.url,data=json.dumps({"refresh_access_token":"string"}))
