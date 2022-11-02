@@ -72,7 +72,7 @@ class Auth:
         }
         try:
             payload = jwt.decode(
-                token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+                token, settings.JWT_REFRESH_SECRET_KEY, algorithms=[settings.ALGORITHM]
             )
             token_data = TokenPayload(**payload)
         except (jwt.JWTError, ValidationError):
