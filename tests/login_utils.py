@@ -2,14 +2,17 @@ import requests
 
 BASE_URL = "https://ubaformapi-7hic1hafd-fastapis-build.vercel.app"
 
-def get_access_token(data):
-    url = BASE_URL + "/auth/login"
-    headers={
-        "accept":"application/json",
-   } 
-    response = requests.post(url, params=data,headers=headers)
-    access_token=response.json()['access_token']
-    return access_token
+def get_access_token(data,return_refresh_token=False):
+  url = BASE_URL + "/auth/login"
+  headers={
+      "accept":"application/json",
+  } 
+  response = requests.post(url, params=data,headers=headers)
+  access_token=response.json()['access_token']
+  if return_refresh_token:
+    refresh_token=response.json()['refresh_token']
+    return access_token,refresh_token 
+  return access_token
 
 def query_get(url,headers,data):
     response = requests.get(url, params=data,headers=headers)
