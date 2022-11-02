@@ -140,7 +140,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
     return response_result
 
 
-@app.post('/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Auth"],
+@app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Auth"],
           dependencies=[Depends(JWTBearer())])
 async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer())):
     response_result = {
@@ -170,7 +170,7 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
     return response_result
 
 
-@app.post('/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Auth"])
+@app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Auth"])
 async def login(form_data: UserAuth = Depends()):
     tokens = {
         "status": "Internal Server Error 505",
@@ -188,7 +188,7 @@ async def auth_use_refresh_token(existing_tokens: UseRefreshToken):
     return handle_refresh_token_access(existing_tokens.refresh_access_token)
 
 
-# @app.get('/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
+# @app.get('/auth/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
 # async def get_me(user: str = Depends(JWTBearer())):
 #     data = get_current_user_credentials(user)
 #     return data

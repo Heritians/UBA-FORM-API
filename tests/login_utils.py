@@ -3,7 +3,7 @@ import requests
 BASE_URL = "https://ubaformapi-dlzqw1gcl-fastapis-build.vercel.app"
 
 def get_access_token(data):
-    url = BASE_URL + "/login"
+    url = BASE_URL + "/auth/login"
     headers={
         "accept":"application/json",
    } 
