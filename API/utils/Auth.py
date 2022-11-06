@@ -10,7 +10,7 @@ from pydantic import ValidationError
 
 from ..core.ConfigEnv import settings
 from..core.Exceptions import *
-from ..models.AuthSchema import TokenPayload
+from ..models.AuthSchema import TokenPayload, TokenSchema
 
 from fastapi.exceptions import HTTPException
 
@@ -31,19 +31,54 @@ class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     @classmethod
-    def get_password_hash(cls,password):
+    def get_password_hash(cls,password: str) -> str:
+        """Encrypts the entered password.
+
+        Args:
+            password: str. Entered password.
+
+        Returns:
+            returns hashed(encrypted) password string.
+        """
         return cls.pwd_context.hash(password)
 
     @classmethod    
-    def verify_password(cls, plain_password, hashed_password):
+    def verify_password(cls, plain_password: str, hashed_password: str) -> bool:
+        """Validates if the entered password matches the actual password.
+
+        Args:
+            plain_password: str. Entered password by user.
+            hashed_password: str. hashed password from the database.
+
+        Returns:
+            bool value indicating whether the passwords match or not.
+        """
         return cls.pwd_context.verify(plain_password, hashed_password)
 
-    @classmethod
-    def verify_village_name(cls, entered_village_name, db_village_name):
+    @staticmethod
+    def verify_village_name(entered_village_name: str, db_village_name: str) -> bool:
+        """Validates if the entered password matches the actual password.
+
+        Args:
+            entered_village_name: str. Entered `village_name` by user.
+            db_village_name: str. village_name from the database.
+
+        Returns:
+            bool value indicating whether the village names match or not.
+        """
         return entered_village_name == db_village_name
 
-    @staticmethod    
+    @staticmethod
     def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> str:
+        """Creates JWT access token.
+
+        Args:
+            subject: Union[Any, str]. Hash_key to generate access token from.
+            expires_delta: int = None. Expiry time for the JWT.
+
+        Returns:
+            encoded_jwt: str. Encoded JWT token from the subject of interest.
+        """
         if expires_delta is not None:
             expires_delta = datetime.utcnow() + expires_delta
         else:
@@ -55,6 +90,15 @@ class Auth:
 
     @staticmethod    
     def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) -> str:
+        """Creates JWT refresh access token.
+
+        Args:
+            subject: Union[Any, str]. Hash_key to generate access token from.
+            expires_delta: int = None. Expiry time for the JWT.
+
+        Returns:
+            encoded_jwt: str. Encoded JWT token from the subject of interest.
+        """
         if expires_delta is not None:
             expires_delta = datetime.utcnow() + expires_delta
         else:
@@ -65,7 +109,20 @@ class Auth:
         return encoded_jwt
 
     @staticmethod
-    def generate_access_tokens_from_refresh_tokens(token: str):
+    def generate_access_tokens_from_refresh_tokens(token: str) -> TokenSchema:
+        """Generates a new pair of tokens by implementing rotating
+        refresh_access_tokens.
+
+        Args:
+            token: str. Current valid refresh access token.
+
+        Returns:
+            tokens: TokenSchema. New tokens with new validity.
+
+        Raises:
+            LoginFailedException: If the current refresh access token is
+                                  invalid.
+        """
         tokens = {
             "status": "Internal Server Error 505",
             "access_token": "",

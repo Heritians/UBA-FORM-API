@@ -1,3 +1,5 @@
+"""Exception Handlers to handle custom built exceptions.
+"""
 from API import app
 from .Exceptions import *
 

@@ -1,4 +1,23 @@
+"""Custom Exception classes to update status messages and codes according to
+different scenarios.
+
+Custom Exceptions:
+    VillageNotFoundException: If queried village is not found in the database.
+
+    AuthorizationFailedException: If wrong endpoint or unauthorized access.
+
+    InfoNotFoundException: If queried information not found in the database.
+
+    ExistingUserException: If new account is attempted to create for
+                           existing users.
+
+    LoginFailedException: If credentials are not valid.
+
+    DuplicateEntryException: If duplicate entry is attempted to store in the
+                             database.
+"""
 import json
+
 from ..models.FrontendResponseSchema import FrontendResponseModel
 from ..models.AuthSchema import TokenSchema
 
