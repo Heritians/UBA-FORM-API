@@ -1,3 +1,10 @@
+"""Wrapper functions for DBQueries module. These functions are used to perform 
+CRUD operations on the database.
+"""
+from pymongo.results import InsertManyResult, InsertOneResult
+from pymongo.cursor import Cursor
+from pymongo.typings import _DocumentType
+
 from ..models.RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
 from ..utils.DBConnection import DBConnection
@@ -34,7 +41,16 @@ collection_names = {
 }
 
 
-def commit_to_db(response_result: dict, form_data: FormData):
+def commit_to_db(response_result: dict, form_data: FormData)->(InsertOneResult|InsertManyResult):
+    """Wrapper function to commit the data to the database.
+    Args:
+        response_result (dict): response result to be returned in case of error.
+        form_data (FormData): data to be committed to the database.
+        
+    Returns:
+        An instance of class: pymongo.results.InsertOneResult or 
+        pymongo.results.InsertManyResult which returns the result of the commit operation.
+    """
     db = form_data.static_vars.village_name
     cursor = DBQueries.filtered_db_search(db, collection_names['meta'], [], resp_id=form_data.respondent_prof.id_no)
 
@@ -47,7 +63,6 @@ def commit_to_db(response_result: dict, form_data: FormData):
     fid = DBQueries.fetch_last(db, collection_names['meta'])['_id']
 
     # respondent's profile
-
     data = form_data.respondent_prof.dict()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['rpf'], data)
@@ -113,22 +128,51 @@ def commit_to_db(response_result: dict, form_data: FormData):
     response_result['message'].append('posted successfully')
 
 
-def fetch_from_db(response_result: dict, resp_data: str):
+def fetch_from_db(response_result: dict, resp_data: str)->dict:
+    """Wrapper function to fetch data from the database.
+    Args:
+        response_result (dict): response result to be returned in case of error.
+        resp_data (str): data to be fetched from the database.
+        
+    Returns:
+        A dictionary containing the data fetched from the database.
+    """
     db = resp_data
     result = DBQueries.retrieve_documents(db)
     return result
 
 
-def fetch_familydata(response_result: dict, resp_data: str, respondent_id: str):
+def fetch_familydata(response_result: dict, resp_data: str, respondent_id: str)->dict:
+    """Wrapper function to fetch family data from the database.
+    Args:
+        response_result (dict): response result to be returned in case of error.
+        resp_data (str): data to be fetched from the database.
+        
+    Returns:
+        A dictionary containing the data of the family fetched from the database.
+    """
     db = resp_data
     result = DBQueries.retrieve_documents_by_id(db, respondent_id, response_result)
     return result
 
 
-def fetch_individualdata(response_result: dict, db_name: str, respondent_id: str):
+def fetch_individualdata(response_result: dict, db_name: str, respondent_id: str)->Cursor[_DocumentType]:
+    """Wrapper function to fetch individual data from the database.
+    Args:
+        response_result (dict): response result to be returned in case of error.
+        db_name (str): name of the database.
+        respondent_id (str): id of the respondent.
+        
+    Returns:
+        Cursor[_DocumentType]: A cursor containing the data of the individual 
+        fetched from the database."""
     result = DBQueries.fetch_indiv_document(db_name, respondent_id, response_result)
     return result
 
 
-def get_db_conn_flag():
+def get_db_conn_flag()->DBConnection:
+    """Wrapper function to get the database connection flag.
+    Returns:
+        DBConnection: An instance of class: DBConnection.
+    """
     return DBConnection.flag
