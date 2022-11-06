@@ -1,3 +1,6 @@
+"""This module contains the routes for the API.It contains the functions 
+that are used to create the endpoints."""
+
 from API import app
 from API.services.DBManipulation import *
 from API.services.AuthServices import *
