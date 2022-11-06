@@ -63,7 +63,7 @@ def user_login(tokens: TokenSchema, form_data: UserAuth):
         raise LoginFailedException(tokens)
 
     if not Auth.verify_password(form_data.password, data[0]['password']) or \
-            not Auth.verify_village_name(data[0]['village_name'], ):
+            not Auth.verify_village_name(data[0]['village_name'], form_data.village_name):
         # incorrect credentials
         raise LoginFailedException(tokens)
 
