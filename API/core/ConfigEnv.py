@@ -1,3 +1,5 @@
+"""Config class for handling env variables.
+"""
 from functools import lru_cache
 
 from pydantic import BaseSettings
@@ -18,7 +20,4 @@ def get_settings():
     return Settings()
 
 
-
 settings = get_settings()
-
-

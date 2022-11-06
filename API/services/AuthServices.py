@@ -8,10 +8,9 @@ from jose import jwt
 
 from API.utils.Auth import Auth
 from ..core.ConfigEnv import settings
-from ..models.AuthSchema import UserOut, UserAuth, TokenPayload, TokenSchema
-from ..models.FrontendResponseSchema import FrontendResponseModel
-from ..utils.DBQueries import DBQueries
 from ..core.Exceptions import *
+from ..models.AuthSchema import UserOut, UserAuth, TokenPayload
+from ..utils.DBQueries import DBQueries
 
 
 def signup(response_result: FrontendResponseModel, data: UserAuth):
@@ -22,6 +21,9 @@ def signup(response_result: FrontendResponseModel, data: UserAuth):
                          response captured from the API to the frontend.
         data: UserAuth. New user's prospective credentials from the frontend
                         to create their account.
+
+    Raises:
+        ExistingUserException: If account with entered AADHAR Number already exists.
     """
     # querying database to check if user already exist
     user = DBQueries.filtered_db_search("Auth", data.role, [], AADHAR=data.AADHAR_NO)
@@ -48,9 +50,11 @@ def user_login(tokens: TokenSchema, form_data: UserAuth):
                              related information to grant genuine users their
                              respective level of authorization according to
                              the maintained hierarchy.
-
         form_data: UserAuth. Sign-in credentials entered by the users at the
                              time of signing in.
+
+    Raises:
+        LoginFailedException: If no user with entered credentials exists.
     """
     user = DBQueries.filtered_db_search("Auth", form_data.role, ['_id'], AADHAR=form_data.AADHAR_NO)
     data = list(user)
@@ -59,7 +63,7 @@ def user_login(tokens: TokenSchema, form_data: UserAuth):
         raise LoginFailedException(tokens)
 
     if not Auth.verify_password(form_data.password, data[0]['password']) or \
-            not Auth.verify_village_name(form_data.village_name, data[0]['village_name']):
+            not Auth.verify_village_name(data[0]['village_name'], form_data.village_name):
         # incorrect credentials
         raise LoginFailedException(tokens)
 
@@ -112,4 +116,13 @@ def get_role(token: str) -> str:
 
 
 def handle_refresh_token_access(token: str) -> TokenSchema:
+    """Wrapper method to implement rotating access tokens by validating
+    current `refresh_access_token`.
+
+    Args:
+        token: A `refresh_access_token` from the user.
+
+    Returns:
+        A new pair of refresh_access and access tokens
+    """
     return Auth.generate_access_tokens_from_refresh_tokens(token)
