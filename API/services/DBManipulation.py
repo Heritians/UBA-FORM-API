@@ -5,6 +5,8 @@ from pymongo.results import InsertManyResult, InsertOneResult
 from pymongo.cursor import Cursor
 from pymongo.typings import _DocumentType
 
+from typing import Union
+
 from ..models.RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
 from ..utils.DBConnection import DBConnection
@@ -41,7 +43,7 @@ collection_names = {
 }
 
 
-def commit_to_db(response_result: dict, form_data: FormData)->(InsertOneResult|InsertManyResult):
+def commit_to_db(response_result: dict, form_data: FormData)->Union[InsertOneResult,InsertManyResult]:
     """Wrapper function to commit the data to the database.
     Args:
         response_result (dict): response result to be returned in case of error.

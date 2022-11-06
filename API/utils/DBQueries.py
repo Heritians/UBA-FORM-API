@@ -22,7 +22,7 @@ pydantic.json.ENCODERS_BY_TYPE[ObjectId]=str
 class DBQueries:
 
     @classmethod
-    def insert_to_database(cls, db_name:str, coll_name:str, data:dict)->(InsertOneResult | InsertManyResult):
+    def insert_to_database(cls, db_name:str, coll_name:str, data:dict)->Union[InsertOneResult, InsertManyResult]:
         """insert a single record or iterable of records to the database.
 
         Args:
