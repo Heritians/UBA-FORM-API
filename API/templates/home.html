@@ -36,7 +36,7 @@
                         <div class="hero-copy">
                             <h1 class="hero-title mt-0">UBA Form API</h1>
                             <p class="hero-paragraph">Our API is cross platform compatible and provides serverless & seamless services as FaaS (Function as a Service).</p>
-                            <div class="hero-cta"><a class="button button-primary" href="https://ubaformapi.vercel.app/docs">HTTP Request Logs</a><a class="button" href="#feature-id">Features</a></div>
+                            <div class="hero-cta"><a class="button button-primary" href=docs>HTTP Request Logs</a><a class="button" href="#feature-id">Features</a></div>
                         </div>
                         <div class="hero-figure anime-element">
                             <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
@@ -104,6 +104,30 @@
                                     <h4 class="feature-title mt-24">Serverless FaaS Service</h4>
                                     <p class="text-sm mb-0">
                                         This API is serverless and provides FaaS (Function as a Service) which means that you don't have to worry about managing servers, scaling, or paying for idle time that are managed by the cloud provider.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="feature text-center is-revealing">
+                                <div class="feature-inner">
+                                    <div class="feature-icon">
+                                        <img src="{{url_for('static',path='/images/feature-icon-05.svg')}}"
+                                            alt="Feature 05">
+                                    </div>
+                                    <h4 class="feature-title mt-24">Custom JWT Authentication</h4>
+                                    <p class="text-sm mb-0">
+                                        API is equipped with custom JWT authentication. All the protected routes are now injected with this custom JWT Bearer dependency.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="feature text-center is-revealing">
+                                <div class="feature-inner">
+                                    <div class="feature-icon">
+                                        <img src="{{url_for('static',path='/images/feature-icon-06.svg')}}"
+                                            alt="Feature 06">
+                                    </div>
+                                    <h4 class="feature-title mt-24">Scoped Authorization</h4>
+                                    <p class="text-sm mb-0">
+                                        Hierarchical scope of access applies a coherent authorization barrier to prevent unauthorized access. This ensures that only the required features are shown to a user with specific role and access to other sensitive information is not granted.
                                     </p>
                                 </div>
                             </div>
