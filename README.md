@@ -3,7 +3,7 @@
 ![Vercel](https://vercelbadge.vercel.app/api/mayureshagashe2105/UBA-FORM-API)
 ![Build](https://github.com/Heritians/UBA-FORM-API/actions/workflows/api-route-test.yml/badge.svg)
 [![GitHub release](https://img.shields.io/github/release/Heritians/UBA-FORM-API)](https://github.com/Heritians/UBA-FORM-API/releases/)
-[![GitLab issues by label](https://badgen.net/gitlab/label-issues/NickBusey/HomelabOS/ContributionsWelcome)](https://gitlab.com/NickBusey/HomelabOS/-/issues?scope=all&state=all&label_name[]=ContributionsWelcome)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 ![Licence](https://img.shields.io/github/license/mayureshagashe2105/UBA-FORM-API)
 
 > Connecting Villages API serves as middleware for the frontend website and visualization dashboard.
