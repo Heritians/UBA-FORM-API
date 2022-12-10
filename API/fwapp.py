@@ -14,11 +14,20 @@ from .core.Exceptions import *
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 # template and static files setup
 templates = Jinja2Templates(directory="API/templates/")
 app.mount("/static", StaticFiles(directory="API/static"), name="static")
 
+#Middleware to handle CORS (cross origin  resource sharing) error in the browser
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", tags=["Home"])
 def home(request: Request):
