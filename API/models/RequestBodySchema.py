@@ -41,7 +41,7 @@ class _3_FamilyInformation(BaseModel):
     name: str
     age: int
     sex: str
-    martial_status: str
+    marital_status: str
     education: str
     schooling_status: str
     AADHAR_No: str
@@ -169,7 +169,7 @@ class FormData(BaseModel):
     agri_inputs: _9_AgriculturalInputs
 
     # agricultural products
-    agri_products: _10_AgriculturalProductsNormalYear
+    agri_products: Union[List[_10_AgriculturalProductsNormalYear], Tuple[_10_AgriculturalProductsNormalYear]]
 
     # livestock numbers
     livestock_nos: _11_LivestockNumbers
