@@ -58,7 +58,7 @@ data={
       "name": "Mayuresh",
       "age": 20,
       "sex": "Male",
-      "martial_status": "U",
+      "marital_status": "U",
       "education": "College",
       "schooling_status": "3 year",
       "AADHAR_No": 1234,
@@ -74,7 +74,7 @@ data={
       "name": "Anmol",
       "age": 20,
       "sex": "Male",
-      "martial_status": "U",
+      "marital_status": "U",
       "education": "College",
       "schooling_status": "3 year",
       "AADHAR_No": 2345,
@@ -90,7 +90,7 @@ data={
       "name": "Hemanth",
       "age": 20,
       "sex": "Male",
-      "martial_status": "U",
+      "marital_status": "U",
       "education": "College",
       "schooling_status": "3 year",
       "AADHAR_No": 3456,
@@ -106,7 +106,7 @@ data={
       "name": "Gargi",
       "age": 20,
       "sex": "Female",
-      "martial_status": "U",
+      "marital_status": "U",
       "education": "College",
       "schooling_status": "3 year",
       "AADHAR_No": 4567,
@@ -207,11 +207,11 @@ data={
     "irrigation":"Open",
     "irrigation_sys":"Open"
   },
-  "agri_products": {
+  "agri_products": [{
     "crop_name": "rice",
     "crop_area_prev_yr_acre": 0.2,
     "productivity_in_quintals_per_acre": 3
-  },
+  }],
   "livestock_nos": {
     "cows": 2,
     "buffalo": 2,
