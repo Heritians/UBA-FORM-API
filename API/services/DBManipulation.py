@@ -111,9 +111,13 @@ def commit_to_db(response_result: dict, form_data: FormData)->Union[InsertOneRes
     DBQueries.insert_to_database(db, collection_names['ai'], data)
 
     # agri products
-    data = form_data.agri_products.dict()
-    data['__id'] = fid
-    DBQueries.insert_to_database(db, collection_names['ap'], data)
+    data = form_data.agri_products
+    data = [agri_prods.dict() for agri_prods in data]
+    [indiv_crop.update({"__id": fid}) for indiv_crop in data]
+    DBQueries.insert_to_database(db, collection_names['fi'], data)
+
+    # data['__id'] = fid
+    # DBQueries.insert_to_database(db, collection_names['ap'], data)
 
     # livestock nums
     data = form_data.livestock_nos.dict()
