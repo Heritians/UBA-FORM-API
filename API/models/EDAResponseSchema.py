@@ -49,7 +49,7 @@ class _3_FamilyInformation(BaseModel):
     name: str
     age: int
     sex: str
-    martial_status: str
+    marital_status: str
     education: str
     schooling_status: str
     AADHAR_No: str
