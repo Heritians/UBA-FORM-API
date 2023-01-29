@@ -47,7 +47,7 @@ class _3_FamilyInformation(BaseModel):
     AADHAR_No: str
     has_bank_acc: bool
     is_computer_literate: bool
-    has_SSP: bool
+    has_SSP: str
     health_prob: Union[str,None]
     has_MNREGA: bool
     SHG: bool
