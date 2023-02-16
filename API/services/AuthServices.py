@@ -91,8 +91,8 @@ def get_current_user_credentials(token: str) -> UserOut:
     )
     token_data = TokenPayload(**payload)
     user_cred = token_data.sub.split("_")
-    user = UserOut()
-    user.AADHAR, user.role, user.village_name = user_cred
+    user = UserOut(AADHAR=user_cred[0], role=user_cred[1], village_name=user_cred[2])
+    # user.AADHAR, user.role, user.village_name = user_cred
 
     return user
 

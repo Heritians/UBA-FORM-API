@@ -66,7 +66,7 @@ def api_post_data(responses: FormData, user_credentials: str = Depends(JWTBearer
     }
     user_creds = get_current_user_credentials(user_credentials)
 
-    commit_to_db(response_result, responses, user_creds['AADHAR'])
+    commit_to_db(response_result, responses, user_creds.AADHAR)
     return response_result
 
 
@@ -84,12 +84,12 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
                         response_result=response_result)
     def scoped_checks(roles: str, user_creds: UserOut):
         if roles == 'admin':
-            response_data = fetch_from_db(response_result, user_creds['village_name'])
+            response_data = fetch_from_db(response_result, user_creds.village_name)
         else:
             response_data = fetch_from_db(response_result, village_name)
         return response_data['data']
 
-    response_data = scoped_checks(user_creds['role'], user_creds)
+    response_data = scoped_checks(user_creds.role, user_creds)
 
     response_result['data'] = response_data
     response_result['status'] = 'success'
@@ -110,13 +110,13 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
     user_creds = get_current_user_credentials(user_credentials)
 
     @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
-                        village_name=user_creds['village_name'], response_result=response_result)
+                        village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(roles: str, user_creds: UserOut):
         pass
 
-    scoped_checks(user_creds['role'], user_creds)
+    scoped_checks(user_creds.role, user_creds)
 
-    familydata = fetch_familydata(response_result, user_creds['village_name'], respondents_id)
+    familydata = fetch_familydata(response_result, user_creds.village_name, respondents_id)
 
     response_result['data'] = familydata["data"]
     response_result['status'] = 'success'
@@ -136,13 +136,13 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
     user_creds = get_current_user_credentials(user_credentials)
 
     @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
-                        village_name=user_creds['village_name'], response_result=response_result)
+                        village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(roles: str, user_creds: UserOut):
         pass
 
-    scoped_checks(user_creds['role'], user_creds)
+    scoped_checks(user_creds.role, user_creds)
 
-    indivdualdata = fetch_individualdata(response_result, user_creds['village_name'], respondents_id)
+    indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
 
     response_result['data'] = indivdualdata
     response_result['status'] = 'success'
@@ -169,10 +169,10 @@ async def create_user(data: UserAuth, user_credentials: str = Depends(JWTBearer(
         if data.role == 'admin' and roles == 'admin':
             raise AuthorizationFailedException(response_result, "not authorized")
 
-        if roles == "admin" and data.village_name != user_creds['village_name']:
+        if roles == "admin" and data.village_name != user_creds.village_name:
             raise AuthorizationFailedException(response_result, "not authorized")
 
-    scoped_checks(user_creds['role'], user_creds)
+    scoped_checks(user_creds.role, user_creds)
 
     signup(response_result, data)
     return response_result
