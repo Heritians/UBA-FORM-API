@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app/"
+BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app"
 
 def get_access_token(data,return_refresh_token=False):
   url = BASE_URL + "/auth/login"

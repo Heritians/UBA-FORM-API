@@ -68,7 +68,7 @@ def user_login(tokens: TokenSchema, form_data: UserAuth):
         raise LoginFailedException(tokens)
 
     # successful login
-    sub = form_data.AADHAR_NO + "_" + form_data.role
+    sub = form_data.AADHAR_NO + "_" + form_data.role + "_" + form_data.village_name
     tokens['access_token'] = Auth.create_access_token(sub)
     tokens['refresh_token'] = Auth.create_refresh_token(sub)
     tokens['status'] = 'login successful'
@@ -90,9 +90,9 @@ def get_current_user_credentials(token: str) -> UserOut:
         token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
     )
     token_data = TokenPayload(**payload)
-    AADHAR, role = token_data.sub.split("_")
-    cursor = DBQueries.filtered_db_search("Auth", role, ['_id', 'password'], AADHAR=AADHAR)
-    user = list(cursor)[0]
+    user_cred = token_data.sub.split("_")
+    user = UserOut(AADHAR=user_cred[0], role=user_cred[1], village_name=user_cred[2])
+    # user.AADHAR, user.role, user.village_name = user_cred
 
     return user
 
