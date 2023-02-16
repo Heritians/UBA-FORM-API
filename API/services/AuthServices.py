@@ -90,9 +90,9 @@ def get_current_user_credentials(token: str) -> UserOut:
         token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
     )
     token_data = TokenPayload(**payload)
-    AADHAR, role = token_data.sub.split("_")
-    cursor = DBQueries.filtered_db_search("Auth", role, ['_id', 'password'], AADHAR=AADHAR)
-    user = list(cursor)[0]
+    user_cred = token_data.sub.split("_")
+    user = UserOut()
+    user.AADHAR, user.role, user.village_name = user_cred
 
     return user
 

@@ -22,6 +22,7 @@ class UserAuth(BaseModel):
 
 class UserOut(BaseModel):
     AADHAR: str
+    role: str
     village_name: str
 
 
