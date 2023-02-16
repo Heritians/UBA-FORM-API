@@ -58,18 +58,20 @@ def api_response_check():
 
 @app.post("/api/post_data", response_model=FrontendResponseModel, dependencies=[Depends(JWTBearer())],
           tags=["Resource Server"])
-def api_post_data(responses: FormData):
+def api_post_data(responses: FormData, user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
+    user_creds = get_current_user_credentials(user_credentials)
 
-    commit_to_db(response_result, responses)
+    commit_to_db(response_result, responses, user_creds['AADHAR'])
     return response_result
 
 
-@app.get("/api/get_data", response_model=FrontendResponseModel, tags=["Resource Server"],        dependencies=[Depends(JWTBearer())])
+@app.get("/api/get_data", response_model=FrontendResponseModel, tags=["Resource Server"],
+         dependencies=[Depends(JWTBearer())])
 def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",

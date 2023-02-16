@@ -6,6 +6,7 @@ from pymongo.cursor import Cursor
 from pymongo.typings import _DocumentType
 
 from typing import Union
+from datetime import datetime
 
 from ..models.RequestBodySchema import FormData
 from ..utils.DBQueries import DBQueries
@@ -43,11 +44,12 @@ collection_names = {
 }
 
 
-def commit_to_db(response_result: dict, form_data: FormData)->Union[InsertOneResult,InsertManyResult]:
+def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->Union[InsertOneResult,InsertManyResult]:
     """Wrapper function to commit the data to the database.
     Args:
         response_result (dict): response result to be returned in case of error.
         form_data (FormData): data to be committed to the database.
+        user_AADHAR (str): Aadhar Number of the volunteer/user filling the form.
         
     Returns:
         An instance of class: pymongo.results.InsertOneResult or 
@@ -60,7 +62,9 @@ def commit_to_db(response_result: dict, form_data: FormData)->Union[InsertOneRes
         raise DuplicateEntryException(response_result)
 
     DBQueries.insert_to_database(form_data.static_vars.village_name,
-                                 collection_names['meta'], dict({'resp_id': form_data.respondent_prof.id_no})
+                                 collection_names['meta'], dict({'resp_id': form_data.respondent_prof.id_no,
+                                                                 'volunteer_id': user_AADHAR,
+                                                                 'timestamp': datetime.now()})
                                  )
     fid = DBQueries.fetch_last(db, collection_names['meta'])['_id']
 
