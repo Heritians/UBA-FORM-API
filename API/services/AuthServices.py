@@ -68,7 +68,7 @@ def user_login(tokens: TokenSchema, form_data: UserAuth):
         raise LoginFailedException(tokens)
 
     # successful login
-    sub = form_data.AADHAR_NO + "_" + form_data.role
+    sub = form_data.AADHAR_NO + "_" + form_data.role + "_" + form_data.village_name
     tokens['access_token'] = Auth.create_access_token(sub)
     tokens['refresh_token'] = Auth.create_refresh_token(sub)
     tokens['status'] = 'login successful'
