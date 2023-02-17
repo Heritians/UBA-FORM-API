@@ -36,7 +36,7 @@ class TestFetchIndividualData(unittest.TestCase):
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchIndividualData.url, params=TestFetchIndividualData.params, headers=headers)
-        with open("intended responses/fetch_indiv_data.json", 'r') as f:
+        with open("intended_responses/fetch_indiv_data.json", 'r') as f:
             data = json.load(f)
             self.assertEqual(response.json(), data)
 
