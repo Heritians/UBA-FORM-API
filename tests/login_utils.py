@@ -28,5 +28,5 @@ def query_post(url, headers, data):
     return response
 
 
-with open("intended_responses/postdata.json", 'r') as f:
+with open("./intended_responses/postdata.json", 'r') as f:
     data = json.load(f)
