@@ -3,8 +3,6 @@ import unittest
 import requests
 import json
 from login_utils import get_access_token, BASE_URL
-from dotenv import load_dotenv
-load_dotenv()
 
 class TestFetchFamilyData(unittest.TestCase):
     url = BASE_URL + "/api/get_familydata"
