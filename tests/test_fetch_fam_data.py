@@ -3,7 +3,8 @@ import unittest
 import requests
 import json
 from login_utils import get_access_token, BASE_URL
-
+from dotenv import load_dotenv
+load_dotenv()
 
 class TestFetchFamilyData(unittest.TestCase):
     url = BASE_URL + "/api/get_familydata"
@@ -38,7 +39,7 @@ class TestFetchFamilyData(unittest.TestCase):
             "Content-Type": "application/json"
         }
         response = requests.get(url=TestFetchFamilyData.url, params=TestFetchFamilyData.params, headers=headers)
-        with open('intended_responses/fetch_fam_data.json', 'r') as f:
+        with open('./intended_responses/fetch_fam_data.json', 'r') as f:
             data = json.load(f)
             self.assertEqual(response.json(), data)
 
