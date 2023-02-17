@@ -118,7 +118,7 @@ def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->
     data = form_data.agri_products
     data = [agri_prods.dict() for agri_prods in data]
     [indiv_crop.update({"__id": fid}) for indiv_crop in data]
-    DBQueries.insert_to_database(db, collection_names['fi'], data)
+    DBQueries.insert_to_database(db, collection_names['ap'], data)
 
     # data['__id'] = fid
     # DBQueries.insert_to_database(db, collection_names['ap'], data)

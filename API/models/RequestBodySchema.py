@@ -111,8 +111,8 @@ class _8_LandholdingInformationAcres(BaseModel):
 class _9_AgriculturalInputs(BaseModel):
     is_chemical_fertilizer_used:Tuple[bool,float]
     is_chemical_insecticide_used:Tuple[bool,float]
-    is_chemical_weedice_used:Tuple[bool,float]
-    is_chemical_organic_manuevers:Tuple[bool,float]
+    is_chemical_weedicide_used:Tuple[bool,float]
+    is_chemical_organic_manures:Tuple[bool,float]
     irrigation:str
     irrigation_sys:str
 
