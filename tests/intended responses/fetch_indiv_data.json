@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "message": [
+    "Authenticated"
+  ],
+  "data": {
+    "name": "Anmol",
+    "age": 20,
+    "sex": "Male",
+    "marital_status": "U",
+    "education": "College",
+    "schooling_status": "3 year",
+    "AADHAR_No": "test_sub",
+    "has_bank_acc": true,
+    "is_computer_literate": true,
+    "has_SSP": "no pension",
+    "health_prob": "None",
+    "has_MNREGA": true,
+    "SHG": true,
+    "occupations": "Student"
+  }
+}
