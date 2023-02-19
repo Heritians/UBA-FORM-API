@@ -124,7 +124,7 @@ class Auth:
                                   invalid.
         """
         tokens = {
-            "status": "Internal Server Error 505",
+            "status": "Internal Server Error 500",
             "access_token": "",
             "refresh_token": "",
             "role": "unauthorized"

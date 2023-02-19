@@ -26,23 +26,22 @@ Raises:
 from typing import Callable
 
 from ..models.AuthSchema import UserOut
-from .DBConnection import DBConnection
+from ..services import DBManipulation
 from ..core.Exceptions import *
 
 
 def init_checks(**kwargs) -> Callable:
+    print("village_name" in kwargs)
     def checks(specs: Callable) -> Callable:
-        def wrapper_checks(role: str, creds: UserOut):
-            if role not in kwargs["authorized_roles"]:
+        def wrapper_checks(creds: UserOut):
+            if creds.role not in kwargs["authorized_roles"]:
                 raise AuthorizationFailedException(kwargs['response_result'], "not authorized")
-            if 'wrong_endpoint_roles' in kwargs.keys() and role in kwargs['wrong_endpoint_roles']:
+            if 'wrong_endpoint_roles' in kwargs.keys() and creds.role in kwargs['wrong_endpoint_roles']:
                 raise AuthorizationFailedException(kwargs['response_result'], "wrong endpoint")
-            if role == 'GOVTOff' and kwargs['village_name'] \
-                    not in [db_names for db_names in
-                            DBConnection.get_client().list_database_names() if
-                            db_names not in ['Auth', 'string']]:
+            if creds.role == 'GOVTOff' and "village_name" in kwargs and kwargs['village_name'] \
+                    not in DBManipulation.get_available_villages(kwargs["response_result"]):
                 raise VillageNotFoundException(kwargs['response_result'], "village not found in the DB")
-            return specs(role, creds)
+            return specs(creds)
 
         return wrapper_checks
 

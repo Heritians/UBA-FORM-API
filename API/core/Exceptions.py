@@ -110,3 +110,19 @@ class DuplicateEntryException(Exception):
 
     def __repr__(self):
         return json.dumps(self.response_result)
+    
+class DuplicateVillageException(Exception):
+    def __init__(self, response_result: FrontendResponseModel):
+        self.response_result = response_result
+        self.set_statuses()
+        super(DuplicateVillageException, self).__init__()
+
+    def set_statuses(self):
+        self.response_result['status'] = 'abort'
+        self.response_result['message'][0] = 'authenticated'
+        self.response_result['message'].append('Village already exists in the database')
+
+    def __repr__(self):
+        return json.dumps(self.response_result)    
+    
+

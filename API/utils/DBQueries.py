@@ -6,9 +6,8 @@ from pymongo.cursor import Cursor
 from pymongo.results import InsertOneResult,InsertManyResult
 from pymongo.typings import _DocumentType
 
-
-
 from typing import Union
+from datetime import datetime
 
 from .DBConnection import DBConnection
 from ..core.Exceptions import *
@@ -181,5 +180,32 @@ class DBQueries:
         if len(indivdata) == 0:
             raise InfoNotFoundException(response_result, "person with this id does not exist in the database")
         return indivdata[0]
-
+    
+    @classmethod
+    def delete_database(cls,db_name:str)->None:
+        """Delete the database.
+        Args:
+            db_name (str): name of the database
+        """
+        con = DBConnection.get_client()
         
+        con.drop_database(db_name)
+
+    @classmethod
+    def list_database_names(cls)->list:
+
+        """List all the database names.
+        Returns:
+            list: list of all database names
+        """
+        return [db_names for db_names in DBConnection.get_client().list_database_names() if
+                            db_names not in ['Auth', 'string']]  
+
+    @classmethod
+    def create_db(cls,db_name,user_creds)->None:
+        """Create a database.
+        Args:
+            dbname (str): name of the database
+        """
+        DBQueries.insert_to_database(db_name, coll_name="meta", data={'resp_id': user_creds.AADHAR,'volunteer_id': user_creds.AADHAR,'timestamp': datetime.now()})
+                                                                 
