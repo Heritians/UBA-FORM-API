@@ -49,3 +49,9 @@ async def handle_duplicate_entry(request: Request, exec: DuplicateEntryException
                         content=repr(exec)
                         )
 
+@app.exception_handler(DuplicateVillageException)
+async def handle_duplicate_entry(request: Request, exec: DuplicateVillageException):
+    return JSONResponse(status_code=status.HTTP_409_CONFLICT,
+                        content=repr(exec)
+                        )
+

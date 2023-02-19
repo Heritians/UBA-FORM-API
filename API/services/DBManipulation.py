@@ -186,3 +186,41 @@ def get_db_conn_flag()->DBConnection:
         DBConnection: An instance of class: DBConnection.
     """
     return DBConnection.flag
+
+def delete_village_data(village_name: str,response_result:FrontendResponseModel)->None:
+    """Wrapper function to delete the data of a village from the database.
+    Args:
+        response_result (dict): response result to be returned in case of error.
+        village_name (str): name of the village whose data is to be deleted.
+        
+    Returns:
+        A dictionary containing the data of the family fetched from the database.
+    """
+    result = DBQueries.delete_database(village_name)
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated','Village name removed']
+    return result
+
+def get_available_villages(response_result:FrontendResponseModel)->list:
+    """Wrapper function to get the list of villages in the database.
+    Returns:
+        list: A list containing the names of the villages in the database.
+    """
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated']
+    return DBQueries.list_database_names()
+
+
+def create_new_village(dbname,user_creds,response_result:FrontendResponseModel)->None:
+    """Wrapper function to create a new village in the database.
+    """
+    village_list=get_available_villages(response_result)
+    if dbname in village_list:
+        raise DuplicateVillageException(response_result)
+    DBQueries.create_db(dbname,user_creds)
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated','Village name added']
+    response_result["data"]={}
+
+
+
