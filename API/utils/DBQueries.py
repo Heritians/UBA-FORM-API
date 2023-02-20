@@ -6,7 +6,7 @@ from pymongo.cursor import Cursor
 from pymongo.results import InsertOneResult,InsertManyResult
 from pymongo.typings import _DocumentType
 
-from typing import Union
+from typing import Union, Tuple
 from datetime import datetime
 
 from .DBConnection import DBConnection
@@ -97,7 +97,7 @@ class DBQueries:
         return response_data
      
     @classmethod
-    def retrieve__id(cls, db_name:str, respondent_id:str, response_result:dict)->str:
+    def retrieve__id(cls, db_name:str, respondent_id:str, response_result:dict)->Tuple:
         """Retrieve the __id of via respondents_id
         Args:
             db_name (str): name of the database
@@ -118,7 +118,10 @@ class DBQueries:
         resp_id=li[0]['resp_id']
         respli=[docs for docs in respcol.find({"id_no": resp_id})]
         #get __id from the respondent_prof collection
-        return respli[0]['__id']
+        try:
+            return respli[0]['__id'], li[0]['volunteer_id'], li[0]['timestamp']
+        except KeyError as e:
+            return respli[0]['__id'], None, None
         
     @classmethod
     def retrieve_documents_by_id(cls, db_name:str,respondent_id:str, response_result:dict)->dict:
@@ -135,13 +138,14 @@ class DBQueries:
         mydb = con[db_name]
         response_data = {}
         response_data["data"] = {}
-        __id=cls.retrieve__id(db_name,respondent_id, response_result)
+        __id, volunteer_id, timestamp = cls.retrieve__id(db_name,respondent_id, response_result)
         for cols in mydb.list_collection_names():
             if cols=="meta":
                 continue
             mycol = mydb[cols]
             li = [docs for docs in cls.filtered_db_search(db_name,cols,['__id','_id'],__id=__id)]
             response_data["data"].update({mycol.full_name.split('.')[-1]: li})
+        response_data["data"].update({"filled by": volunteer_id, "filled time": timestamp})
         return response_data
 
 
