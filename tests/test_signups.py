@@ -3,6 +3,8 @@ import random
 import json
 import unittest
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 from login_utils import get_access_token, BASE_URL
 
   #only admin can signup new users  
@@ -48,7 +50,28 @@ class MySignupTestCase(unittest.TestCase):
         }
         signupcredowner=json.dumps(signupcrednewowner)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredowner)
-        self.assertEqual(response.json()['status'], 'success')    
+        self.assertEqual(response.json()['status'], 'success')
+
+    def test_bulk_signup_user_owner(self):
+        MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
+        headers={
+        "accept":"application/json",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
+        "Content-Type":"application/json"
+        }  
+        signupcredusers={
+            "AADHAR_NOS": ["1234","2345","3456"],
+            "passwords": [f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}"],
+            "village_name":f"{os.environ['ADMIN_VILLAGE_NAME']}",
+            "role":f"{os.environ['USER_ROLE']}"
+        }  
+        signupcredusers=json.dumps(signupcredusers)
+        response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
+        if response.json()['status'] == 'success':
+            self.assertEqual(response.json()['status'], 'success')
+        else:
+            self.assertEqual(response.json()["message"][0],"No users created")    
+
 
     def test_signup_admin(self):
         MySignupTestCase.signincred["role"]=os.environ['OWNER_ROLE']
@@ -67,6 +90,25 @@ class MySignupTestCase(unittest.TestCase):
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredadmin)
         self.assertEqual(response.json()['status'], 'success')
 
+    def test_bulk_signup_user_admin(self):
+        headers={
+        "accept":"application/json",
+        "Authorization":f"Bearer {get_access_token(MySignupTestCase.signincred)}",
+        "Content-Type":"application/json"
+        }  
+        signupcredusers={
+            "AADHAR_NOS": ["1234","2345","3456"],
+            "passwords": [f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}"],
+            "village_name":f"{os.environ['ADMIN_VILLAGE_NAME']}",
+            "role":f"{os.environ['USER_ROLE']}"
+        }  
+        signupcredusers=json.dumps(signupcredusers)
+        response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
+        if response.json()['status'] == 'success':
+            self.assertEqual(response.json()['status'], 'success')
+        else:
+            self.assertEqual(response.json()["message"][0],"No users created")   
+
     def test_signup_user(self):
         MySignupTestCase.signincred["role"]=os.environ['USER_ROLE']
         headers={
@@ -82,7 +124,7 @@ class MySignupTestCase(unittest.TestCase):
         }
         signupcreduser=json.dumps(signupcreduser)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcreduser)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 401)    
 
     def test_unauth(self):  
         signupcred={

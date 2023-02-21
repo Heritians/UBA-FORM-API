@@ -2,7 +2,7 @@ import json
 
 import requests
 
-BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app"
+BASE_URL = "http://127.0.0.1:8000"
 
 
 def get_access_token(data, return_refresh_token=False):

@@ -5,7 +5,7 @@ from API import app
 from API.services.DBManipulation import *
 from API.services.AuthServices import *
 from .models.RequestBodySchema import FormData
-from .models.AuthSchema import UserAuth, TokenSchema, UserOut, UseRefreshToken
+from .models.AuthSchema import UserAuth, TokenSchema, UserOut, UseRefreshToken, BulkSignup
 from .utils.JWTBearer import JWTBearer
 from .utils import scopes
 from .core.ExceptionHandlers import *
@@ -151,7 +151,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
 
 
 @app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Authorization Server"],dependencies=[Depends(JWTBearer())])
-async def create_user(data: UserAuth,user_credentials: str = Depends(JWTBearer())):
+async def create_user(data: Union[UserAuth,BulkSignup],user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
@@ -159,20 +159,29 @@ async def create_user(data: UserAuth,user_credentials: str = Depends(JWTBearer()
     }
 
     user_creds = get_current_user_credentials(user_credentials)
+  
 
     @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'],
                         village_name=data.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
-        if data.role not in ['admin', 'user']:
-            raise AuthorizationFailedException(response_result, "not authorized")
-
-        if data.role == 'admin' and user_creds.role == 'admin':
-            raise AuthorizationFailedException(response_result, "not authorized")
-
+        if isinstance(data,UserAuth):
+            if data.role not in ['admin', 'user']:
+                raise AuthorizationFailedException(response_result, "not authorized")
+            
+            if data.role == 'admin' and user_creds.role == 'admin':
+                    raise AuthorizationFailedException(response_result, "not authorized")
+        
         if user_creds.role == "admin" and data.village_name != user_creds.village_name:
             raise AuthorizationFailedException(response_result, "not authorized")
-
+        
     scoped_checks(user_creds)
+
+        
+        
+
+
+
+
     
     signup(response_result, data)
     return response_result
