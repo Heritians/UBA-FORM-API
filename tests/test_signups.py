@@ -58,17 +58,18 @@ class MySignupTestCase(unittest.TestCase):
         "Content-Type":"application/json"
         }  
         signupcredusers={
-            "AADHAR_NOS": ["1234","2345","3456"],
+            "AADHAR_NOS": ["1234","2345","3455"],
             "passwords": [f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}",f"{os.environ['ADMIN_PWD']}"],
             "village_name":f"{os.environ['ADMIN_VILLAGE_NAME']}",
             "role":f"{os.environ['USER_ROLE']}"
         }  
         signupcredusers=json.dumps(signupcredusers)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
-        if response.json()['status'] == 'success':
-            self.assertEqual(response.json()['status'], 'success')
-        else:
+        if response.json()['status']=="success":
+            self.assertEqual(response.json()["message"],"Users created successfully")
+        elif response.json()['status']=="failure":
             self.assertEqual(response.json()["message"][0],"No users created")    
+        
 
 
     def test_signup_admin(self):
@@ -102,10 +103,10 @@ class MySignupTestCase(unittest.TestCase):
         }  
         signupcredusers=json.dumps(signupcredusers)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
-        if response.json()['status'] == 'success':
-            self.assertEqual(response.json()['status'], 'success')
-        else:
-            self.assertEqual(response.json()["message"][0],"No users created")   
+        if response.json()['status']=="success":
+            self.assertEqual(response.json()["message"],"Users created successfully")
+        elif response.json()['status']=="failure":
+            self.assertEqual(response.json()["message"][0],"No users created")      
 
     def test_signup_user(self):
         MySignupTestCase.signincred["role"]=os.environ['USER_ROLE']
