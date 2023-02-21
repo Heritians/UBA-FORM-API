@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Union, List, Tuple
 
 
 class TokenSchema(BaseModel):
@@ -19,10 +20,14 @@ class UserAuth(BaseModel):
     village_name: str = Field(..., description="user village name")
     role: str = Field(..., description="user role")
 
-
 class UserOut(BaseModel):
     AADHAR: str
     role: str
+    village_name: str
+    
+class BulkSignup(BaseModel):
+    AADHAR_NOS:Union[List[str],Tuple[str]]
+    passwords:Union[List[str],Tuple[str]]
     village_name: str
 
 

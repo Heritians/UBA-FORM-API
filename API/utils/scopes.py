@@ -31,7 +31,6 @@ from ..core.Exceptions import *
 
 
 def init_checks(**kwargs) -> Callable:
-    print("village_name" in kwargs)
     def checks(specs: Callable) -> Callable:
         def wrapper_checks(creds: UserOut):
             if creds.role not in kwargs["authorized_roles"]:

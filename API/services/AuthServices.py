@@ -5,15 +5,16 @@ methods/functions to handle all the queries. In short, this collection of
 methods/functions are essentially wrappers around the actual definitions.
 """
 from jose import jwt
+from typing import Union
 
 from API.utils.Auth import Auth
 from ..core.ConfigEnv import settings
 from ..core.Exceptions import *
-from ..models.AuthSchema import UserOut, UserAuth, TokenPayload
+from ..models.AuthSchema import UserOut, UserAuth, TokenPayload, BulkSignup
 from ..utils.DBQueries import DBQueries
 
 
-def signup(response_result: FrontendResponseModel, data: UserAuth):
+def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSignup]):
     """Wrapper method to handle signup process.
 
     Args:
@@ -25,20 +26,56 @@ def signup(response_result: FrontendResponseModel, data: UserAuth):
     Raises:
         ExistingUserException: If account with entered AADHAR Number already exists.
     """
-    # querying database to check if user already exist
-    user = DBQueries.filtered_db_search("Auth", data.role, [], AADHAR=data.AADHAR_NO)
-    if len(list(user)) != 0:
-        # user with the entered credentials already exists
-        raise ExistingUserException(response_result)
+    if isinstance(data, UserAuth):
+        # querying database to check if user already exist
+        user = DBQueries.filtered_db_search("Auth", data.role, [], AADHAR=data.AADHAR_NO)
+        if len(list(user)) != 0:
+            # user with the entered credentials already exists
+            raise ExistingUserException(response_result)
+    
+        userinfo = {
+            'AADHAR': data.AADHAR_NO,
+            'password': Auth.get_password_hash(data.password),
+            'village_name': data.village_name,
+        }
+        DBQueries.insert_to_database("Auth", data.role, userinfo)  # saving user to database
+        response_result['status'] = f'success'
+        response_result['message'] = [f'User with this AADHAR NO created successfully']
 
-    userinfo = {
-        'AADHAR': data.AADHAR_NO,
-        'password': Auth.get_password_hash(data.password),
-        'village_name': data.village_name,
-    }
-    DBQueries.insert_to_database("Auth", data.role, userinfo)  # saving user to database
-    response_result['status'] = f'success'
-    response_result['message'] = [f'User with this AADHAR NO created successfully']
+    else:
+        AADHAR_NOS=data.AADHAR_NOS
+        passwords=data.passwords
+        village_name=data.village_name
+
+        users=DBQueries.filtered_db_search("Auth","user",["_id","password","village_name"],AADHAR={"$in":AADHAR_NOS})
+        users=[user["AADHAR"] for user in users]
+
+        invalid_users=[]
+        valid_users=[]
+
+        for user in zip(AADHAR_NOS,passwords):
+            userinfo = {
+            'AADHAR': "",
+            'password': "",
+            'village_name': village_name
+            }
+            if user[0] in users:
+                invalid_users.append(user[0])
+            else:
+                userinfo["AADHAR"]=user[0]
+                userinfo["password"]=user[1]
+                valid_users.append(userinfo) 
+
+        if len(valid_users)!=0:
+            DBQueries.insert_to_database("Auth", "user", valid_users)  # saving user to database
+            response_result['status'] = f'success'
+            response_result['message'] = [f'Users created successfully']
+        else:
+            response_result['status'] = f'failure'
+            response_result['message'] = [f'No users created']
+        response_result["message"].append(f"Users with these AADHAR NOs already exist: {invalid_users} hence aborting")          
+
+
 
 
 def user_login(tokens: TokenSchema, form_data: UserAuth):
