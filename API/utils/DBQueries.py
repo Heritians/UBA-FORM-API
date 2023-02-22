@@ -145,7 +145,7 @@ class DBQueries:
             mycol = mydb[cols]
             li = [docs for docs in cls.filtered_db_search(db_name,cols,['__id','_id'],__id=__id)]
             response_data["data"].update({mycol.full_name.split('.')[-1]: li})
-        response_data["data"].update({"filled by": volunteer_id, "filled time": timestamp})
+        response_data["data"].update({"filled_by": volunteer_id, "filled_time": timestamp})
         return response_data
 
 

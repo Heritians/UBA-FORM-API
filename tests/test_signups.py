@@ -66,9 +66,9 @@ class MySignupTestCase(unittest.TestCase):
         signupcredusers=json.dumps(signupcredusers)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
         if response.json()['status']=="success":
-            self.assertEqual(response.json()["message"],"Users created successfully")
+            self.assertEqual(response.json()["message"][0],"Users created successfully")
         elif response.json()['status']=="failure":
-            self.assertEqual(response.json()["message"][0],"No users created")    
+            self.assertEqual(response.json()["message"][0],"No users created")       
         
 
 
@@ -104,7 +104,7 @@ class MySignupTestCase(unittest.TestCase):
         signupcredusers=json.dumps(signupcredusers)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredusers)
         if response.json()['status']=="success":
-            self.assertEqual(response.json()["message"],"Users created successfully")
+            self.assertEqual(response.json()["message"][0],"Users created successfully")
         elif response.json()['status']=="failure":
             self.assertEqual(response.json()["message"][0],"No users created")      
 
