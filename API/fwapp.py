@@ -175,13 +175,6 @@ async def create_user(data: Union[UserAuth,BulkSignup],user_credentials: str = D
             raise AuthorizationFailedException(response_result, "not authorized")
         
     scoped_checks(user_creds)
-
-        
-        
-
-
-
-
     
     signup(response_result, data)
     return response_result
