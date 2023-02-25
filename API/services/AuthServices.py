@@ -44,7 +44,7 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
 
     else:
         AADHAR_NOS=data.AADHAR_NOS
-        passwords=data.passwords
+        passwords=[Auth.get_password_hash(passwd) for passwd in data.passwords]
         village_name=data.village_name
 
         users=DBQueries.filtered_db_search("Auth","user",["_id","password","village_name"],AADHAR={"$in":AADHAR_NOS})
