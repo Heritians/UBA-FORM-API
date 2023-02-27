@@ -76,8 +76,6 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
         response_result["message"].append(f"Users with these AADHAR NOs already exist: {invalid_users} hence aborting")          
 
 
-
-
 def user_login(tokens: TokenSchema, form_data: UserAuth):
     """Wrapper method to handle sign-ins and generating `access_tokens`.
 
@@ -127,29 +125,10 @@ def get_current_user_credentials(token: str) -> UserOut:
         token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
     )
     token_data = TokenPayload(**payload)
-    user_cred = token_data.sub.split("_")
+    user_cred = token_data.sub.split("_", 2)
     user = UserOut(AADHAR=user_cred[0], role=user_cred[1], village_name=user_cred[2])
-    # user.AADHAR, user.role, user.village_name = user_cred
 
     return user
-
-
-def get_role(token: str) -> str:
-    """Infers user's role by their authenticated `access_token`
-    to help with scoping.
-
-    Args:
-        token: str. Authenticated `access_token` of the user.
-
-    Returns:
-        role: Scope of the user.
-    """
-    payload = jwt.decode(
-        token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
-    )
-    token_data = TokenPayload(**payload)
-    role = token_data.sub.split("_")[1]
-    return role
 
 
 def handle_refresh_token_access(token: str) -> TokenSchema:
