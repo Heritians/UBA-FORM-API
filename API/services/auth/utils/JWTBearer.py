@@ -15,8 +15,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import ValidationError
 from jose import jwt
 
-from ..core.ConfigEnv import settings
-from ..models import TokenPayload
+from API.core.ConfigEnv import settings
+from API.models import TokenPayload
 
 
 class JWTBearer(HTTPBearer):

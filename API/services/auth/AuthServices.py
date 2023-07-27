@@ -7,11 +7,12 @@ methods/functions are essentially wrappers around the actual definitions.
 from jose import jwt
 from typing import Union
 
-from ..utils.Auth import Auth
-from ..core.ConfigEnv import settings
-from ..core.Exceptions import *
-from ..models import UserOut, UserAuth, TokenPayload, BulkSignup
-from ..utils.DBQueries import DBQueries
+from API.core.ConfigEnv import settings
+from API.core.Exceptions import *
+from API.models import UserOut, UserAuth, TokenPayload, BulkSignup
+from API.services.db.utils import DBQueries
+
+from .utils import Auth
 
 
 def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSignup]):
