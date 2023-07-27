@@ -1,5 +1,4 @@
 import requests
-import pprint
 
 BASE_URL=""
 
@@ -32,4 +31,3 @@ def test_get_fromdb_owner(village_name):
 
 
 data = test_get_fromdb_owner("Sehore") # ["Aastha", "Sehore", "string"]
-pprint.pprint(data)
