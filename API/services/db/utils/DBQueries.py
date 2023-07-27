@@ -9,8 +9,8 @@ from pymongo.cursor import Cursor
 from pymongo.results import InsertOneResult,InsertManyResult
 from pymongo.typings import _DocumentType
 
-from .DBConnection import DBConnection
-from ..core.Exceptions import *
+from API.utils.DBConnection import DBConnection
+from API.core.Exceptions import *
 
 
 class DBQueries:
