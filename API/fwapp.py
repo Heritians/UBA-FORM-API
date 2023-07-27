@@ -2,7 +2,7 @@
 that are used to create the endpoints."""
 import datetime
 
-from fastapi import Depends
+from fastapi import Depends, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +14,7 @@ from API.utils import scopes
 from API.core.ExceptionHandlers import *
 from API.core.Exceptions import *
 from API.models import (UserAuth, UserOut, UseRefreshToken,
-                        BulkSignup, FormData, TokenSchema, FrontendResponseModel)
+                        BulkSignup, FormData, TokenSchema)
 from API import app
 
 

@@ -1,11 +1,12 @@
 import json
 
 import requests
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
-BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
+# BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
 # BASE_URL = "http://127.0.0.1:8000" # for testing locally
+BASE_URL = "https://ubaformapi-hzekeban1-fastapis-build.vercel.app"
 
 def get_access_token(data, return_refresh_token=False):
     url = BASE_URL + "/auth/login"
