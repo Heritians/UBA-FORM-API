@@ -1,9 +1,11 @@
 import json
 
 import requests
+# from dotenv import load_dotenv
+# load_dotenv()
 
-BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app"
-
+BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
+# BASE_URL = "http://127.0.0.1:8000" # for testing locally
 
 def get_access_token(data, return_refresh_token=False):
     url = BASE_URL + "/auth/login"
@@ -28,5 +30,5 @@ def query_post(url, headers, data):
     return response
 
 
-with open("tests/intended_responses/postdata.json", 'r') as f:
+with open("./intended_responses/postdata.json", 'r') as f:
     data = json.load(f)
