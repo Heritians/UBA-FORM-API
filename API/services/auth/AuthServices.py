@@ -7,10 +7,10 @@ methods/functions are essentially wrappers around the actual definitions.
 from jose import jwt
 from typing import Union
 
-from API.utils.Auth import Auth
+from ..utils.Auth import Auth
 from ..core.ConfigEnv import settings
 from ..core.Exceptions import *
-from ..models.AuthSchema import UserOut, UserAuth, TokenPayload, BulkSignup
+from ..models import UserOut, UserAuth, TokenPayload, BulkSignup
 from ..utils.DBQueries import DBQueries
 
 

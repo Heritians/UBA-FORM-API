@@ -1,21 +1,16 @@
 """ Queries script for the API. It is used to create the queries 
 that are used to interact with the database. 
 """
+from typing import Union, Tuple
+from datetime import datetime
+
 import pymongo.cursor
 from pymongo.cursor import Cursor
 from pymongo.results import InsertOneResult,InsertManyResult
 from pymongo.typings import _DocumentType
 
-from typing import Union, Tuple
-from datetime import datetime
-
 from .DBConnection import DBConnection
 from ..core.Exceptions import *
-
-# fix ObjectId & FastApi conflict
-import pydantic
-from bson.objectid import ObjectId
-pydantic.json.ENCODERS_BY_TYPE[ObjectId]=str
 
 
 class DBQueries:

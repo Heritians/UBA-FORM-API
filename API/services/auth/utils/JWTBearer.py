@@ -8,15 +8,15 @@ users based on the following factors:
 This utility class validates generated JWTs and grants scoped access to users
 according to their roles.
 """
-from ..core.ConfigEnv import settings
-from ..models.AuthSchema import TokenPayload
-
 from datetime import datetime
 
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import ValidationError
 from jose import jwt
+
+from ..core.ConfigEnv import settings
+from ..models import TokenPayload
 
 
 class JWTBearer(HTTPBearer):

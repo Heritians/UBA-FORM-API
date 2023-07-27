@@ -5,13 +5,16 @@ from pymongo.results import InsertManyResult, InsertOneResult
 from pymongo.cursor import Cursor
 from pymongo.typings import _DocumentType
 
-from typing import Union
+from typing import Union, Callable
 from datetime import datetime
 
-from ..models.RequestBodySchema import FormData
+from ..models import FormData
 from ..utils.DBQueries import DBQueries
 from ..utils.DBConnection import DBConnection
 from ..core.Exceptions import *
+
+from bson.objectid import ObjectId
+from fastapi.encoders import jsonable_encoder
 
 collection_names = {
     "sv": "static_vars",
@@ -43,6 +46,20 @@ collection_names = {
     "meta": "meta"
 }
 
+def json_encoder(custom_encodings: dict):
+    """Wrapper function to encode the data to JSON format.
+    
+    Args:
+        custom_encodings (dict): custom encodings to be used while encoding the data.
+    
+    Returns:
+        A function which encodes the data to desired JSON format.
+    """
+    def wrapper(func: Callable):
+        def custom_json_encoder(*args, **kwargs):
+            return jsonable_encoder(func(*args, **kwargs), custom_encoder=custom_encodings)
+        return custom_json_encoder
+    return wrapper
 
 def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->Union[InsertOneResult,InsertManyResult]:
     """Wrapper function to commit the data to the database.
@@ -137,7 +154,7 @@ def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->
     response_result['message'][0] = 'authenticated'
     response_result['message'].append('posted successfully')
 
-
+@json_encoder({ObjectId: str})
 def fetch_from_db(response_result: dict, resp_data: str)->dict:
     """Wrapper function to fetch data from the database.
     Args:
@@ -151,7 +168,7 @@ def fetch_from_db(response_result: dict, resp_data: str)->dict:
     result = DBQueries.retrieve_documents(db)
     return result
 
-
+@json_encoder({ObjectId: str})
 def fetch_familydata(response_result: dict, resp_data: str, respondent_id: str)->dict:
     """Wrapper function to fetch family data from the database.
     Args:
@@ -165,7 +182,7 @@ def fetch_familydata(response_result: dict, resp_data: str, respondent_id: str)-
     result = DBQueries.retrieve_documents_by_id(db, respondent_id, response_result)
     return result
 
-
+@json_encoder({ObjectId: str})
 def fetch_individualdata(response_result: dict, db_name: str, respondent_id: str)->Cursor[_DocumentType]:
     """Wrapper function to fetch individual data from the database.
     Args:
