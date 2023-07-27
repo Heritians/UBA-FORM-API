@@ -1,20 +1,21 @@
 """Wrapper functions for DBQueries module. These functions are used to perform 
 CRUD operations on the database.
 """
+from typing import Union, Callable
+from datetime import datetime
+
 from pymongo.results import InsertManyResult, InsertOneResult
 from pymongo.cursor import Cursor
 from pymongo.typings import _DocumentType
 
-from typing import Union, Callable
-from datetime import datetime
-
-from ..models import FormData
-from ..utils.DBQueries import DBQueries
-from ..utils.DBConnection import DBConnection
-from ..core.Exceptions import *
-
 from bson.objectid import ObjectId
 from fastapi.encoders import jsonable_encoder
+
+from API.models import FormData
+from API.utils.DBConnection import DBConnection
+from API.core.Exceptions import *
+
+from .utils import DBQueries
 
 collection_names = {
     "sv": "static_vars",
