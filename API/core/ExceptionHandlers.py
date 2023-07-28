@@ -1,12 +1,11 @@
 """Exception Handlers to handle custom built exceptions.
 """
+from API import app
+from .Exceptions import *
+
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
 from fastapi import status
-
-from API import app
-
-from .Exceptions import *
 
 
 @app.exception_handler(VillageNotFoundException)

@@ -25,9 +25,9 @@ Raises:
 """
 from typing import Callable
 
-from API.models import UserOut
-from API.services.db import DBManipulation
-from API.core.Exceptions import *
+from ..models.AuthSchema import UserOut
+from ..services import DBManipulation
+from ..core.Exceptions import *
 
 
 def init_checks(**kwargs) -> Callable:

@@ -1,8 +1,9 @@
 """ Import Important Packages"""
+import os
+
 from pymongo import MongoClient
 
-from API.core.ConfigEnv import settings
-
+from ..core.ConfigEnv import settings
 database_uri = settings.DATABASE_URI
 
 class DBConnection:

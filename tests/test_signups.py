@@ -5,7 +5,7 @@ import unittest
 import requests
 from login_utils import get_access_token, BASE_URL
 
-#only admin can signup new users
+  #only admin can signup new users  
 class MySignupTestCase(unittest.TestCase):
     url= BASE_URL + "/auth/signup"
     signincred = {
@@ -41,7 +41,7 @@ class MySignupTestCase(unittest.TestCase):
         "Content-Type":"application/json"
         }
         signupcrednewowner={
-        "AADHAR_NO": str(random.randint(1,1000000000000000)),
+        "AADHAR_NO": random.randint(1,1000000000000000),
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
         "role": f"{os.environ['USER_ROLE']}"
@@ -80,14 +80,13 @@ class MySignupTestCase(unittest.TestCase):
         "Content-Type":"application/json"
         }
         signupcredadmin={
-        "AADHAR_NO": str(random.randint(1,1000000000000000)),
+        "AADHAR_NO": random.randint(1,1000000000000000),
         "password": f"{os.environ['ADMIN_PWD']}",
         "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
         "role": f"{os.environ['ADMIN_ROLE']}"
         }
         signupcredadmin=json.dumps(signupcredadmin)
         response=requests.post(MySignupTestCase.url,headers=headers,data=signupcredadmin)
-        print(response)
         self.assertEqual(response.json()['status'], 'success')
 
     def test_bulk_signup_user_admin(self):

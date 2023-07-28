@@ -1,27 +1,26 @@
 """This module contains the routes for the API.It contains the functions 
 that are used to create the endpoints."""
-from API import app
-from API.services.db import *
-from API.services.auth import *
-from API.services.auth.utils import JWTBearer
-from API.utils import scopes
-from API.core.ExceptionHandlers import *
-from API.core.Exceptions import *
-from API.models import (UserAuth, UserOut, UseRefreshToken,
-                        BulkSignup, FormData, TokenSchema, FrontendResponseModel)
 
-from fastapi import Depends, Request
+from API import app
+from API.services.DBManipulation import *
+from API.services.AuthServices import *
+from .models.RequestBodySchema import FormData
+from .models.AuthSchema import UserAuth, TokenSchema, UserOut, UseRefreshToken, BulkSignup
+from .utils.JWTBearer import JWTBearer
+from .utils import scopes
+from .core.ExceptionHandlers import *
+from .core.Exceptions import *
+
 from fastapi.templating import Jinja2Templates
+from fastapi import Request, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-
-import datetime
 
 # template and static files setup
 templates = Jinja2Templates(directory="API/templates/")
 app.mount("/static", StaticFiles(directory="API/static"), name="static")
 
-# Middleware to handle CORS (cross origin  resource sharing) error in the browser
+#Middleware to handle CORS (cross origin  resource sharing) error in the browser
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,9 +29,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/", tags=["Home"])
-def _home(request: Request):
+def home(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
 
@@ -51,7 +49,6 @@ def api_response_check():
             db_msg = "Connection failed to db"
 
         response_result["message"].append(db_msg)
-        response_result["data"]['timestamp'] = f"{datetime.datetime.now()}"
 
     except Exception as e:
         print("Exception :", e)
@@ -153,9 +150,8 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
     return response_result
 
 
-@app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel,
-          tags=["Authorization Server"], dependencies=[Depends(JWTBearer())])
-async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str = Depends(JWTBearer())):
+@app.post('/auth/signup', summary="Create new user", response_model=FrontendResponseModel, tags=["Authorization Server"],dependencies=[Depends(JWTBearer())])
+async def create_user(data: Union[UserAuth,BulkSignup],user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
@@ -163,29 +159,29 @@ async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str =
     }
 
     user_creds = get_current_user_credentials(user_credentials)
+  
 
     @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'],
                         village_name=data.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
-        if isinstance(data, UserAuth):
+        if isinstance(data,UserAuth):
             if data.role not in ['admin', 'user']:
                 raise AuthorizationFailedException(response_result, "not authorized")
-
+            
             if data.role == 'admin' and user_creds.role == 'admin':
-                raise AuthorizationFailedException(response_result, "not authorized")
-
+                    raise AuthorizationFailedException(response_result, "not authorized")
+        
         if user_creds.role == "admin" and data.village_name != user_creds.village_name:
             raise AuthorizationFailedException(response_result, "not authorized")
-
+        
     scoped_checks(user_creds)
-
+    
     signup(response_result, data)
     return response_result
 
 
-@app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema,
-          tags=["Authorization Server"])
-async def auth_login(form_data: UserAuth = Depends()):
+@app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema, tags=["Authorization Server"])
+async def login(form_data: UserAuth = Depends()):
     tokens = {
         "status": "Internal Server Error 500",
         "access_token": "",
@@ -201,10 +197,9 @@ async def auth_login(form_data: UserAuth = Depends()):
 async def auth_use_refresh_token(existing_tokens: UseRefreshToken):
     return handle_refresh_token_access(existing_tokens.refresh_access_token)
 
-
-@app.get("/ops/get_village_list", summary="Get the list of village names", response_model=FrontendResponseModel,
-         tags=["Sensitive ops"], dependencies=[Depends(JWTBearer())])
+@app.get("/ops/get_village_list", summary="Get the list of village names", response_model=FrontendResponseModel, tags=["Sensitive ops"], dependencies=[Depends(JWTBearer())])
 async def get_village_list(user_credentials: str = Depends(JWTBearer())):
+
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
@@ -213,21 +208,19 @@ async def get_village_list(user_credentials: str = Depends(JWTBearer())):
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result)
+    @scopes.init_checks(authorized_roles=['GOVTOff'],response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         pass
 
     scoped_checks(user_creds)
 
-    village_list = get_available_villages(response_result)
+    village_list=get_available_villages(response_result)
     response_result['data']["village_names"] = village_list
     return response_result
 
-
-# delete database route
-@app.delete('/ops/delete_database', summary="Delete the database", tags=["Sensitive ops"],
-            dependencies=[Depends(JWTBearer())])
-async def ops_delete_database(dbname: str, user_credentials: str = Depends(JWTBearer())):
+#delete database route
+@app.delete('/ops/delete_database',summary="Delete the database", tags=["Sensitive ops"], dependencies=[Depends(JWTBearer())])
+async def delete_database(dbname:str,user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
@@ -236,19 +229,18 @@ async def ops_delete_database(dbname: str, user_credentials: str = Depends(JWTBe
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result, village_name=dbname)
+    @scopes.init_checks(authorized_roles=['GOVTOff'],response_result=response_result,village_name=dbname)
     def scoped_checks(user_creds):
         pass
 
     scoped_checks(user_creds)
 
-    delete_village_data(dbname, response_result)
+    delete_village_data(dbname,response_result)
     return response_result
 
 
-@app.put('/ops/update_village_list', summary="Update the village list", tags=["Sensitive ops"],
-         dependencies=[Depends(JWTBearer())])
-async def ops_update_village_list(dbname: str, user_credentials: str = Depends(JWTBearer())):
+@app.put('/ops/update_village_list',summary="Update the village list", tags=["Sensitive ops"], dependencies=[Depends(JWTBearer())])
+async def update_village_list(dbname:str,user_credentials: str = Depends(JWTBearer())):
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
@@ -257,13 +249,13 @@ async def ops_update_village_list(dbname: str, user_credentials: str = Depends(J
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result)
+    @scopes.init_checks(authorized_roles=['GOVTOff'],response_result=response_result)
     def scoped_checks(user_creds):
         pass
 
     scoped_checks(user_creds)
 
-    create_new_village(dbname, user_creds, response_result)
+    create_new_village(dbname,user_creds,response_result)
     return response_result
 
 # @app.get('/auth/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
