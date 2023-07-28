@@ -33,8 +33,7 @@ app.add_middleware(
 
 @app.get("/", tags=["Home"])
 def _home(request: Request):
-    # return templates.TemplateResponse("home.html", context={"request": request})
-    return {"details": "Hello world!"}
+    return templates.TemplateResponse("home.html", context={"request": request})
 
 
 @app.get("/api/response_check", response_model=FrontendResponseModel, tags=["Resource Server"])
