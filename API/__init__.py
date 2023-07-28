@@ -12,7 +12,7 @@ actions that are required to be performed only once.
 
 from fastapi import FastAPI
 
-app = FastAPI(title="Connecting Villages API",version="V0.2.0",description="API for Connecting Villages")
+app = FastAPI(title="Connecting Villages API",version="0.2.0",description="API for Connecting Villages")
 
 from API import fwapp
 from API.utils.DBConnection import DBConnection
