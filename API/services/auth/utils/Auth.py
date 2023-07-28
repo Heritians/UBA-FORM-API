@@ -8,9 +8,9 @@ from jose import jwt
 from passlib.context import CryptContext
 from pydantic import ValidationError
 
-from ..core.ConfigEnv import settings
-from..core.Exceptions import *
-from ..models.AuthSchema import TokenPayload, TokenSchema
+from API.core.ConfigEnv import settings
+from API.core.Exceptions import *
+from API.models import TokenPayload, TokenSchema
 
 from fastapi.exceptions import HTTPException
 

@@ -18,8 +18,7 @@ Custom Exceptions:
 """
 import json
 
-from ..models.FrontendResponseSchema import FrontendResponseModel
-from ..models.AuthSchema import TokenSchema
+from API.models import TokenSchema, FrontendResponseModel
 
 
 class VillageNotFoundException(Exception):
