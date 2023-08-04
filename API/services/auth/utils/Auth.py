@@ -139,7 +139,7 @@ class Auth:
         except (jwt.JWTError, ValidationError):
             raise LoginFailedException(tokens)
         tokens['access_token'] = Auth.create_access_token(token_data.sub)
-        tokens['refresh_token'] = Auth.create_refresh_token(token_data.sub)
+        tokens['refresh_token'] = token # Do not generate new `REFRESH_ACCESS_TOKEN`, instead, return the original
         tokens['status'] = 'login successful'
         tokens['role'] = token_data.sub.split("_")[1]
         return tokens
