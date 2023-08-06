@@ -2,8 +2,8 @@
 * @mayureshagashe2105 @HemanthSai7
 
 # DB Generic Queries
-./API/services/db/* @HemanthSai7 @mayureshagashe2105
-./API/services/db/utils/* @HemanthSai7
+/API/services/db/* @HemanthSai7 @mayureshagashe2105
+/API/services/db/utils/* @HemanthSai7
 
 # Auth processes
 /API/services/auth/* @mayureshagashe2105
