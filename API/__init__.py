@@ -10,7 +10,10 @@ defines the module's namespace and can be used to perform initialization
 actions that are required to be performed only once.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from fastapi.exceptions import HTTPException
+
+from pymongo.errors import ServerSelectionTimeoutError
 
 app = FastAPI(title="Connecting Villages API",version="V0.2.0",description="API for Connecting Villages")
 
@@ -20,7 +23,8 @@ from API.utils.DBConnection import DBConnection
 # inits
 try:
     dbconnection = DBConnection()
-    print(f"Connection successful:{dbconnection.get_client()}")
-except Exception as e:
-    print(e)
+    test_conn = DBConnection.get_client().server_info()
+
+except ServerSelectionTimeoutError as e:
+    raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
 
