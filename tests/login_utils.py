@@ -4,9 +4,9 @@ import requests
 # from dotenv import load_dotenv
 # load_dotenv()
 
-# BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
+BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
 # BASE_URL = "http://127.0.0.1:8000" # for testing locally
-BASE_URL = "https://ubaformapi-git-fastapi01000andpydanticv2c-80d502-fastapis-build.vercel.app"
+# BASE_URL = "https://ubaformapi-git-fastapi01000andpydanticv2c-80d502-fastapis-build.vercel.app"
 
 
 def get_access_token(data, return_refresh_token=False):
