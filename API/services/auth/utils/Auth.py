@@ -16,7 +16,7 @@ from fastapi.exceptions import HTTPException
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 3 # 3 days
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 3 # 3 hours
 
 
 class Auth:
