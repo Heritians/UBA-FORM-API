@@ -147,7 +147,7 @@ def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->
     DBQueries.insert_to_database(db, collection_names['ln'], data)
 
     # major probs
-    data = form_data.major_problems.dict()
+    data = form_data.major_problems.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['mp'], data)
 
@@ -240,5 +240,17 @@ def create_new_village(dbname,user_creds,response_result:FrontendResponseModel)-
     response_result['message'] = ['Authenticated','Village name added']
     response_result["data"]={}
 
+def get_resp_id_on_date(dbname,coll_name,date,response_result:FrontendResponseModel)->list:
+    """Wrapper function to get the list of users who have filled the form on a given date.
+    """
+    start_date=datetime.strptime(f"{date} 00:00:00","%d-%m-%Y %H:%M:%S")
+    end_date=datetime.strptime(f"{date} 23:59:59","%d-%m-%Y %H:%M:%S")
 
+    cursor=DBQueries.filtered_db_search(dbname,coll_name,['_id','__id','timestamp','volunteer_id'],
+                                        timestamp={"$gte":start_date,"$lte":end_date})
+    resp_data=[docs["resp_id"] for docs in cursor if docs["resp_id"]]
 
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated']
+
+    return resp_data
