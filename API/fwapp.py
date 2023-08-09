@@ -266,6 +266,32 @@ async def ops_update_village_list(dbname: str, user_credentials: str = Depends(J
     create_new_village(dbname, user_creds, response_result)
     return response_result
 
+@app.get('/api/get_respid_list', summary="Get the list of users", dependencies=[Depends(JWTBearer())], tags=["Resource Server"])
+async def get_respid_list(date:str, village_name:str=None, user_credentials:str=Depends(JWTBearer())):
+    response_result={
+        "status":"not_allowed",
+        "message":["Not authenticated"],
+        "data":{}
+    }
+
+    user_creds=get_current_user_credentials(user_credentials)
+
+    @scopes.init_checks(authorized_roles=['admin','GOVTOff'],response_result=response_result,village_name=village_name)
+    def scoped_checks(user_creds:UserOut):
+        if user_creds.role == 'admin':
+            response_data = get_resp_id_on_date(user_creds.village_name,'meta',date,response_result)
+        else:
+            response_data = get_resp_id_on_date(village_name,'meta',date,response_result)
+        return response_data
+
+    response_data = scoped_checks(user_creds)
+
+    response_result['data']['user_ids'] = response_data
+    response_result['status'] = 'success'
+    response_result['message'] = ['authorized']
+
+    return response_result
+
 # @app.get('/auth/me', summary='Get details of currently logged in user', response_model=UserOut, tags=["SessionInfo"])
 # async def get_me(user: str = Depends(JWTBearer())):
 #     data = get_current_user_credentials(user)

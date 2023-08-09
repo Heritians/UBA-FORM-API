@@ -33,4 +33,4 @@ def query_post(url, headers, data):
 
 
 with open("tests/intended_responses/postdata.json", 'r') as f:
-    data = json.load(f)
+    data = json.load(f)    
