@@ -87,54 +87,54 @@ def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->
     fid = DBQueries.fetch_last(db, collection_names['meta'])['_id']
 
     # respondent's profile
-    data = form_data.respondent_prof.dict()
+    data = form_data.respondent_prof.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['rpf'], data)
 
     # gen_ho_data
-    data = form_data.gen_ho_info.dict()
+    data = form_data.gen_ho_info.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['ghi'], data)
 
     # fam_info
     data = form_data.fam_info
-    data = [fam_mem_info.dict() for fam_mem_info in data]
+    data = [fam_mem_info.model_dump() for fam_mem_info in data]
     [indiv_info.update({"__id": fid}) for indiv_info in data]
     DBQueries.insert_to_database(db, collection_names['fi'], data)
 
     # migration info
-    data = form_data.mig_status.dict()
+    data = form_data.mig_status.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['ms'], data)
 
     # gov schemes
-    data = form_data.govt_schemes.dict()
+    data = form_data.govt_schemes.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['gs'], data)
 
     # water source
-    data = form_data.water_source.dict()
+    data = form_data.water_source.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['ws'], data)
 
     # soucre of E
-    data = form_data.source_of_energy.dict()
+    data = form_data.source_of_energy.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['soe'], data)
 
     # Land holding info
-    data = form_data.land_holding_info.dict()
+    data = form_data.land_holding_info.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['lhi'], data)
 
     # agri inputs
-    data = form_data.agri_inputs.dict()
+    data = form_data.agri_inputs.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['ai'], data)
 
     # agri products
     data = form_data.agri_products
-    data = [agri_prods.dict() for agri_prods in data]
+    data = [agri_prods.model_dump() for agri_prods in data]
     [indiv_crop.update({"__id": fid}) for indiv_crop in data]
     DBQueries.insert_to_database(db, collection_names['ap'], data)
 
@@ -142,12 +142,12 @@ def commit_to_db(response_result: dict, form_data: FormData, user_AADHAR: str)->
     # DBQueries.insert_to_database(db, collection_names['ap'], data)
 
     # livestock nums
-    data = form_data.livestock_nos.dict()
+    data = form_data.livestock_nos.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['ln'], data)
 
     # major probs
-    data = form_data.major_problems.dict()
+    data = form_data.major_problems.model_dump()
     data['__id'] = fid
     DBQueries.insert_to_database(db, collection_names['mp'], data)
 
@@ -240,5 +240,17 @@ def create_new_village(dbname,user_creds,response_result:FrontendResponseModel)-
     response_result['message'] = ['Authenticated','Village name added']
     response_result["data"]={}
 
+def get_resp_id_on_date(dbname,coll_name,date,response_result:FrontendResponseModel)->list:
+    """Wrapper function to get the list of users who have filled the form on a given date.
+    """
+    start_date=datetime.strptime(f"{date} 00:00:00","%d-%m-%Y %H:%M:%S")
+    end_date=datetime.strptime(f"{date} 23:59:59","%d-%m-%Y %H:%M:%S")
 
+    cursor=DBQueries.filtered_db_search(dbname,coll_name,['_id','__id','timestamp','volunteer_id'],
+                                        timestamp={"$gte":start_date,"$lte":end_date})
+    resp_data=[docs["resp_id"] for docs in cursor if docs["resp_id"]]
 
+    response_result['status'] = 'success'
+    response_result['message'] = ['Authenticated']
+
+    return resp_data
