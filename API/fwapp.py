@@ -4,7 +4,7 @@ from API import app
 from API.services.db import *
 from API.services.auth import *
 from API.services.auth.utils import JWTBearer
-from API.utils import scopes
+from API.utils import scopes, role_manager
 from API.core.ExceptionHandlers import *
 from API.core.Exceptions import *
 from API.models import (UserAuth, UserOut, UseRefreshToken,
@@ -83,10 +83,10 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
     }
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=["admin", "GOVTOff"], village_name=village_name,
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], village_name=village_name,
                         response_result=response_result)
     def scoped_checks(user_creds: UserOut):
-        if user_creds.role == 'admin':
+        if user_creds.role == role_manager.admin:
             village_data = fetch_from_db(response_result, user_creds.village_name)
         else:
             village_data = fetch_from_db(response_result, village_name)
@@ -112,7 +112,7 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], wrong_endpoint_roles=[role_manager.GOVTOff],
                         village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         pass
@@ -138,7 +138,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], wrong_endpoint_roles=[role_manager.GOVTOff],
                         village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         pass
@@ -164,17 +164,17 @@ async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str =
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff],
                         village_name=data.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         if isinstance(data, UserAuth):
-            if data.role not in ['admin', 'user']:
+            if data.role not in [role_manager.admin, role_manager.user]:
                 raise AuthorizationFailedException(response_result, "not authorized")
 
-            if data.role == 'admin' and user_creds.role == 'admin':
+            if data.role == role_manager.admin and user_creds.role == role_manager.admin:
                 raise AuthorizationFailedException(response_result, "not authorized")
 
-        if user_creds.role == "admin" and data.village_name != user_creds.village_name:
+        if user_creds.role == role_manager.admin and data.village_name != user_creds.village_name:
             raise AuthorizationFailedException(response_result, "not authorized")
 
     scoped_checks(user_creds)
@@ -228,7 +228,7 @@ async def ops_delete_database(dbname: str, user_credentials: str = Depends(JWTBe
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result, village_name=dbname)
+    @scopes.init_checks(authorized_roles=[role_manager.GOVTOff], response_result=response_result, village_name=dbname)
     def scoped_checks(user_creds):
         pass
 
@@ -249,7 +249,7 @@ async def ops_update_village_list(dbname: str, user_credentials: str = Depends(J
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result)
+    @scopes.init_checks(authorized_roles=[role_manager.GOVTOff], response_result=response_result)
     def scoped_checks(user_creds):
         pass
 
@@ -268,9 +268,9 @@ async def get_respid_list(date:str, village_name:str=None, user_credentials:str=
 
     user_creds=get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin','GOVTOff'],response_result=response_result,village_name=village_name)
+    @scopes.init_checks(authorized_roles=[role_manager.admin,role_manager.GOVTOff],response_result=response_result,village_name=village_name)
     def scoped_checks(user_creds:UserOut):
-        if user_creds.role == 'admin':
+        if user_creds.role == role_manager.admin:
             response_data = get_resp_data_on_date(user_creds.village_name, date,response_result)
         else:
             response_data = get_resp_data_on_date(village_name, date,response_result)
