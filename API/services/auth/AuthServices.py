@@ -11,6 +11,7 @@ from API.core.ConfigEnv import settings
 from API.core.Exceptions import *
 from API.models import UserOut, UserAuth, TokenPayload, BulkSignup
 from API.services.db.utils import DBQueries
+from API.utils import role_manager
 
 from .utils import Auth
 
@@ -48,7 +49,7 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
         passwords=[Auth.get_password_hash(passwd) for passwd in data.passwords]
         village_name=data.village_name
 
-        users=DBQueries.filtered_db_search("Auth","user",["_id","password","village_name"],AADHAR={"$in":AADHAR_NOS})
+        users=DBQueries.filtered_db_search("Auth", role_manager.user, ["_id","password","village_name"], search_idxs={"AADHAR":{"$in":AADHAR_NOS}})
         users=[user["AADHAR"] for user in users]
 
         invalid_users=[]
@@ -68,7 +69,7 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
                 valid_users.append(userinfo) 
 
         if len(valid_users)!=0:
-            DBQueries.insert_to_database("Auth", "user", valid_users)  # saving user to database
+            DBQueries.insert_to_database("Auth", role_manager.user, valid_users)  # saving user to database
             response_result['status'] = f'success'
             response_result['message'] = [f'Users created successfully']
         else:
