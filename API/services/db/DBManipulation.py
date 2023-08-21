@@ -77,7 +77,7 @@ def fetch_from_db(response_result: dict, resp_data: str)->dict:
     result = DBQueries.retrieve_documents(db,collection_names["fam_data"])
     return result
 
-
+@json_encoder({ObjectId: str})
 def fetch_familydata(response_result: dict, village_name: str, respondent_id: str)->dict:
     """Wrapper function to fetch family data from the database.
     Args:
