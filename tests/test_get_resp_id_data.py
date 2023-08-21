@@ -17,7 +17,7 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
             "role": f"{os.environ['OWNER_ROLE']}"
         }
-        params={"date":"2023-08-21","village_name":"Sehore"}
+        params={"date":"2023-08-22","village_name":"Sehore"}
         headers={
             "accept":"application/json",
             "Authorization": f"Bearer {get_access_token(signincred)}",
@@ -33,7 +33,7 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
             "role": f"{os.environ['OWNER_ROLE']}"
         }
-        params={"date":"2023-08-21","village_name":"villageDoesNotExist"}
+        params={"date":"2023-08-22","village_name":"villageDoesNotExist"}
         headers={
             "accept":"application/json",
             "Authorization": f"Bearer {get_access_token(signincred)}",
@@ -50,13 +50,14 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "role": f"{os.environ['ADMIN_ROLE']}"
         }
 
-        params={"date":"2023-08-21","village_name":"None"}   
+        params={"date":"2023-08-22","village_name":"None"}   
         headers = {
             "accept": "application/json",
             "Authorization": f"Bearer {get_access_token(signincred)}",
             "Content-Type": "application/json",
         }
         response=requests.get(url=self.url,params=params,headers=headers)
+        print(response)
         self.assertEqual(response.json(),self.data)
 
     def test_get_respdata_user(self):
@@ -66,7 +67,7 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "village_name": f"{os.environ['ADMIN_VILLAGE_NAME']}",
             "role": f"{os.environ['USER_ROLE']}"
         }
-        params={"date":"02-03-2023","village_name":"None"}
+        params={"date":"2023-08-22","village_name":"None"}
         headers={
             "accept":"application/json",
             "Authorization": f"Bearer {get_access_token(signincred)}",
