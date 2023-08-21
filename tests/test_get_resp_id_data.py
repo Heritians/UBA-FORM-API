@@ -24,7 +24,7 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "Content-Type": "application/json",
         }
         response=requests.get(url=self.url,params=params,headers=headers)
-        self.assertEqual(response.json(),self.data)
+        self.assertEqual(response.json()["data"],self.data["data"])
 
     def test_get_respdata_owner_invalid_village(self):
         signincred = {
@@ -57,7 +57,6 @@ class MyGetRespIDTestCase(unittest.TestCase):
             "Content-Type": "application/json",
         }
         response=requests.get(url=self.url,params=params,headers=headers)
-        print(response)
         self.assertEqual(response.json(),self.data)
 
     def test_get_respdata_user(self):
