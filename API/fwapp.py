@@ -185,7 +185,7 @@ async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str =
 
 @app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema,
           tags=["Authorization Server"])
-async def auth_login(form_data: UserAuth = Depends()):
+async def auth_login(form_data: UserAuth):
     tokens = {
         "status": "Internal Server Error 500",
         "access_token": "",

@@ -14,7 +14,8 @@ def get_access_token(data, return_refresh_token=False):
     headers = {
         "accept": "application/json",
     }
-    response = requests.post(url, params=data, headers=headers)
+    data = json.dumps(data)
+    response = requests.post(url, data=data, headers=headers)
     access_token = response.json()['access_token']
     if return_refresh_token:
         refresh_token = response.json()['refresh_token']
