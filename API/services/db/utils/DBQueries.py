@@ -1,7 +1,6 @@
 """ Queries script for the API. It is used to create the queries 
 that are used to interact with the database. 
 """
-import regex as re
 from typing import Union, Tuple, List
 from datetime import datetime
 
