@@ -51,7 +51,7 @@ class MyUpdateVillageListTest(unittest.TestCase):
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
         
-        requests.put(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
+        requests.delete(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
         return self.assertEqual(response.status_code,409)
         
     def test_update_new_village_owner(self):
@@ -70,7 +70,7 @@ class MyUpdateVillageListTest(unittest.TestCase):
         else:
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
         
-        requests.put(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
+        requests.delete(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
         return self.assertEqual(response.status_code,200)
     
     def test_unauth(self):
