@@ -12,7 +12,7 @@ class MyUpdateVillageListTest(unittest.TestCase):
         "role": f"{os.environ['ADMIN_ROLE']}"
         }
     
-    params={"dbname":"test_db"}
+    params={"dbname":"db_test"}
 
     GET_VILLAGE_LIST=BASE_URL+"/api/get_village_list"
     DEL_VILLAGE_NAME=BASE_URL+"/ops/delete_database"
@@ -50,6 +50,8 @@ class MyUpdateVillageListTest(unittest.TestCase):
         else:
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
+        
+        requests.delete(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
         return self.assertEqual(response.status_code,409)
         
     def test_update_new_village_owner(self):
@@ -67,6 +69,8 @@ class MyUpdateVillageListTest(unittest.TestCase):
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
         else:
             response=requests.put(MyUpdateVillageListTest.PUT_URL,headers=headers,params=MyUpdateVillageListTest.params)
+        
+        requests.delete(MyUpdateVillageListTest.DEL_VILLAGE_NAME,headers=headers,params=MyUpdateVillageListTest.params)
         return self.assertEqual(response.status_code,200)
     
     def test_unauth(self):

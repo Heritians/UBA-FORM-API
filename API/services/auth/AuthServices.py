@@ -54,6 +54,7 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
 
         invalid_users = []
         valid_users = []
+        users_created = []
 
         for user in zip(AADHAR_NOS,passwords):
             userinfo = {
@@ -67,6 +68,7 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
                 userinfo["AADHAR"] = user[0]
                 userinfo["password"] = Auth.get_password_hash(user[1])
                 valid_users.append(userinfo) 
+                users_created.append(user[0])
 
         if len(valid_users)!=0:
             DBQueries.insert_to_database("Auth", role_manager.user, valid_users)  # saving user to database
@@ -75,7 +77,8 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
         else:
             response_result['status'] = f'failure'
             response_result['message'] = [f'No users created']
-        response_result["message"].append(f"Users with these AADHAR NOs already exist: {invalid_users} hence aborting")          
+
+        response_result['data'] = {"invalid_users":invalid_users, "valid_users":users_created}       
 
 
 def user_login(tokens: TokenSchema, form_data: UserAuth):
