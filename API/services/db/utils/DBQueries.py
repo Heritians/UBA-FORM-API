@@ -1,6 +1,7 @@
 """ Queries script for the API. It is used to create the queries 
 that are used to interact with the database. 
 """
+import regex as re
 from typing import Union, Tuple, List
 from datetime import datetime
 
@@ -118,7 +119,7 @@ class DBQueries:
             list: list of all database names
         """
         return [db_names for db_names in DBConnection.get_client().list_database_names() if
-                            db_names not in ['Auth']]  
+                            not (db_names == 'Auth' or db_names.startswith('test'))]  
 
     @classmethod
     def create_db(cls, db_name:str, user_creds:str)->None:
