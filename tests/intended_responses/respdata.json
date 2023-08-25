@@ -1,6 +1,8 @@
 {
   "status": "success",
-  "message": ["authorized"],
+  "message": [
+    "authorized"
+  ],
   "data": [
     {
       "_id": "64e3ae6598564bd9e842b780",
@@ -119,18 +121,34 @@
         "kisan_credit_card": 0
       },
       "water_source": {
-        "piped_water": [true, 10],
-        "hand_pump": [true, 20],
-        "comm_water": [false, 0],
-        "open_well": [true, 40],
+        "piped_water": [
+          true,
+          10
+        ],
+        "hand_pump": [
+          true,
+          20
+        ],
+        "comm_water": [
+          false,
+          0
+        ],
+        "open_well": [
+          true,
+          40
+        ],
         "mode_of_water_storage": "individual",
         "other_water_source": "None"
       },
       "source_of_energy": {
         "electricity_conn": true,
         "elec_avail_perday_hour": 12,
-        "lighting": ["electricity"],
-        "cooking": ["LPG"],
+        "lighting": [
+          "electricity"
+        ],
+        "cooking": [
+          "LPG"
+        ],
         "cook_chullah": "Smokeless",
         "appliances": [
           {
@@ -154,10 +172,22 @@
         "uncultivable_area": 0.2
       },
       "agri_inputs": {
-        "is_chemical_fertilizer_used": [true, 5],
-        "is_chemical_insecticide_used": [false, 0],
-        "is_chemical_weedicide_used": [false, 0],
-        "is_chemical_organic_manures": [false, 0],
+        "is_chemical_fertilizer_used": [
+          true,
+          5
+        ],
+        "is_chemical_insecticide_used": [
+          false,
+          0
+        ],
+        "is_chemical_weedicide_used": [
+          false,
+          0
+        ],
+        "is_chemical_organic_manures": [
+          false,
+          0
+        ],
         "irrigation": "Open",
         "irrigation_sys": "Open"
       },
@@ -175,13 +205,19 @@
         "calves": 1,
         "bullocks": 1,
         "poultry_and_ducks": 0,
-        "livestock_shelter": ["open"],
+        "livestock_shelter": [
+          "open"
+        ],
         "avg_daily_milk_prod_litres": 5,
         "animal_waste_or_cow_dung_kgs": 1
       },
       "major_problems": {
-        "problems": ["None"],
-        "Suggestions_by_villagers": ["None"]
+        "problems": [
+          "None"
+        ],
+        "Suggestions_by_villagers": [
+          "None"
+        ]
       },
       "volunteer_id": "5734219582373335",
       "timestamp": "2023-08-22T00:05:17.572000"
@@ -303,18 +339,34 @@
         "kisan_credit_card": 0
       },
       "water_source": {
-        "piped_water": [true, 10],
-        "hand_pump": [true, 20],
-        "comm_water": [false, 0],
-        "open_well": [true, 40],
+        "piped_water": [
+          true,
+          10
+        ],
+        "hand_pump": [
+          true,
+          20
+        ],
+        "comm_water": [
+          false,
+          0
+        ],
+        "open_well": [
+          true,
+          40
+        ],
         "mode_of_water_storage": "individual",
         "other_water_source": "None"
       },
       "source_of_energy": {
         "electricity_conn": true,
         "elec_avail_perday_hour": 12,
-        "lighting": ["electricity"],
-        "cooking": ["LPG"],
+        "lighting": [
+          "electricity"
+        ],
+        "cooking": [
+          "LPG"
+        ],
         "cook_chullah": "Smokeless",
         "appliances": [
           {
@@ -338,10 +390,22 @@
         "uncultivable_area": 0.2
       },
       "agri_inputs": {
-        "is_chemical_fertilizer_used": [true, 5],
-        "is_chemical_insecticide_used": [false, 0],
-        "is_chemical_weedicide_used": [false, 0],
-        "is_chemical_organic_manures": [false, 0],
+        "is_chemical_fertilizer_used": [
+          true,
+          5
+        ],
+        "is_chemical_insecticide_used": [
+          false,
+          0
+        ],
+        "is_chemical_weedicide_used": [
+          false,
+          0
+        ],
+        "is_chemical_organic_manures": [
+          false,
+          0
+        ],
         "irrigation": "Open",
         "irrigation_sys": "Open"
       },
@@ -359,13 +423,19 @@
         "calves": 1,
         "bullocks": 1,
         "poultry_and_ducks": 0,
-        "livestock_shelter": ["open"],
+        "livestock_shelter": [
+          "open"
+        ],
         "avg_daily_milk_prod_litres": 5,
         "animal_waste_or_cow_dung_kgs": 1
       },
       "major_problems": {
-        "problems": ["None"],
-        "Suggestions_by_villagers": ["None"]
+        "problems": [
+          "None"
+        ],
+        "Suggestions_by_villagers": [
+          "None"
+        ]
       },
       "volunteer_id": "5734219582373335",
       "timestamp": "2023-08-22T00:13:08.843000"
@@ -487,18 +557,34 @@
         "kisan_credit_card": 0
       },
       "water_source": {
-        "piped_water": [true, 10],
-        "hand_pump": [true, 20],
-        "comm_water": [false, 0],
-        "open_well": [true, 40],
+        "piped_water": [
+          true,
+          10
+        ],
+        "hand_pump": [
+          true,
+          20
+        ],
+        "comm_water": [
+          false,
+          0
+        ],
+        "open_well": [
+          true,
+          40
+        ],
         "mode_of_water_storage": "individual",
         "other_water_source": "None"
       },
       "source_of_energy": {
         "electricity_conn": true,
         "elec_avail_perday_hour": 12,
-        "lighting": ["electricity"],
-        "cooking": ["LPG"],
+        "lighting": [
+          "electricity"
+        ],
+        "cooking": [
+          "LPG"
+        ],
         "cook_chullah": "Smokeless",
         "appliances": [
           {
@@ -522,10 +608,22 @@
         "uncultivable_area": 0.2
       },
       "agri_inputs": {
-        "is_chemical_fertilizer_used": [true, 5],
-        "is_chemical_insecticide_used": [false, 0],
-        "is_chemical_weedicide_used": [false, 0],
-        "is_chemical_organic_manures": [false, 0],
+        "is_chemical_fertilizer_used": [
+          true,
+          5
+        ],
+        "is_chemical_insecticide_used": [
+          false,
+          0
+        ],
+        "is_chemical_weedicide_used": [
+          false,
+          0
+        ],
+        "is_chemical_organic_manures": [
+          false,
+          0
+        ],
         "irrigation": "Open",
         "irrigation_sys": "Open"
       },
@@ -543,16 +641,217 @@
         "calves": 1,
         "bullocks": 1,
         "poultry_and_ducks": 0,
-        "livestock_shelter": ["open"],
+        "livestock_shelter": [
+          "open"
+        ],
         "avg_daily_milk_prod_litres": 5,
         "animal_waste_or_cow_dung_kgs": 1
       },
       "major_problems": {
-        "problems": ["None"],
-        "Suggestions_by_villagers": ["None"]
+        "problems": [
+          "None"
+        ],
+        "Suggestions_by_villagers": [
+          "None"
+        ]
       },
       "volunteer_id": "5734219582373335",
       "timestamp": "2023-08-22T00:21:20.111000"
+    },
+    {
+      "_id": "64e4b1ba6f4e9ac97e3d553a",
+      "respondent_prof": {
+        "respondents_name": "kjbkjkbkjbjb",
+        "respondents_age": 78,
+        "relation_w_hoh": "jhvjhvjhvjhv",
+        "respondents_contact": "98798787987987987",
+        "id_type": "voterId",
+        "id_no": "123456789123"
+      },
+      "gen_ho_info": {
+        "ho_id": "978",
+        "hoh_name": "jkhbjhbjh",
+        "hoh_gender": "male",
+        "category": "ST",
+        "pov_status": "APL",
+        "own_house": false,
+        "house_type": "Semi Pucca",
+        "toilet": "Private",
+        "drainage_status": "Open",
+        "waste_collection_sys": "Common Point",
+        "compost_pit": "Group",
+        "biogas_plant": "Group",
+        "annual_income": 980980809
+      },
+      "fam_info": [
+        {
+          "name": "kbkjbjbjk",
+          "age": 2,
+          "sex": "Female",
+          "marital_status": "Married",
+          "education": "Completed Class 5th",
+          "schooling_status": "College",
+          "AADHAR_No": "987979879798",
+          "has_bank_acc": true,
+          "is_computer_literate": false,
+          "has_SSP": "Old Age Pension",
+          "health_prob": "ibjhbjbhjhbn",
+          "has_MNREGA": false,
+          "SHG": false,
+          "occupations": "Pisci-culture/Poultry"
+        },
+        {
+          "name": "jhvjvhjvh",
+          "age": 876876,
+          "sex": "Male",
+          "marital_status": "Married",
+          "education": "Literate",
+          "schooling_status": "College",
+          "AADHAR_No": "897979879897",
+          "has_bank_acc": true,
+          "is_computer_literate": false,
+          "has_SSP": "Old Age Pension",
+          "health_prob": "kjkgjgjhhjg",
+          "has_MNREGA": true,
+          "SHG": true,
+          "occupations": "Animal Husbandry"
+        }
+      ],
+      "mig_status": {
+        "are_migrants": true,
+        "num_migrants": 987978,
+        "migration_period_months": 8797,
+        "years_since_migration": 79879
+      },
+      "govt_schemes": {
+        "PM_jan_dhan_yojana": 7,
+        "PM_ujjawala_yojana": 88,
+        "PM_awas_yojana": 77,
+        "sukanya_samriddhi_yojana": 7,
+        "mudra_yojana": 87,
+        "PM_jivan_jyoti_yojana": 887,
+        "PM_suraksha_bima_yojana": 87,
+        "atal_pension_yojana": 7,
+        "fasal_bima_yojana": 87,
+        "kaushal_vikas_yojana": 87,
+        "krishi_sinchai_yojana": 87,
+        "jan_aushadhi_yojana": 87,
+        "SBM_toilet": 8,
+        "soil_health_card": 788,
+        "ladli_lakshmi_yojana": 78,
+        "janni_suraksha_yojana": 77,
+        "kisan_credit_card": 8
+      },
+      "water_source": {
+        "piped_water": [
+          true,
+          879
+        ],
+        "hand_pump": [
+          true,
+          7987
+        ],
+        "comm_water": [
+          true,
+          897
+        ],
+        "open_well": [
+          true,
+          897
+        ],
+        "mode_of_water_storage": "Individual",
+        "other_water_source": "NA"
+      },
+      "source_of_energy": {
+        "electricity_conn": true,
+        "elec_avail_perday_hour": 3,
+        "lighting": [
+          "Kerosene"
+        ],
+        "cooking": [
+          "Biogas"
+        ],
+        "cook_chullah": "Smokeless",
+        "appliances": [
+          {
+            "appliance_name": "98jhvjhvh",
+            "appliance_nos": 78,
+            "appliance_dur": 7
+          },
+          {
+            "appliance_name": "jhvjvvjhvjh",
+            "appliance_nos": 6,
+            "appliance_dur": 7
+          }
+        ]
+      },
+      "land_holding_info": {
+        "total_land": 270935,
+        "irrigated_area": 7867,
+        "barren_or_wasteland": 87687,
+        "cultivable_area": 7,
+        "unirrigated_area": 87687,
+        "uncultivable_area": 87687
+      },
+      "agri_inputs": {
+        "is_chemical_fertilizer_used": [
+          true,
+          789
+        ],
+        "is_chemical_insecticide_used": [
+          true,
+          987
+        ],
+        "is_chemical_weedicide_used": [
+          true,
+          987
+        ],
+        "is_chemical_organic_manures": [
+          true,
+          987
+        ],
+        "irrigation": "Borewell",
+        "irrigation_sys": "Flooding"
+      },
+      "agri_products": [
+        {
+          "crop_name": "kkjbkjbjb89",
+          "crop_area_prev_yr_acre": 89,
+          "productivity_in_quintals_per_acre": 89
+        },
+        {
+          "crop_name": "kjhvkjhvhk",
+          "crop_area_prev_yr_acre": 78,
+          "productivity_in_quintals_per_acre": 78
+        }
+      ],
+      "livestock_nos": {
+        "cows": 7,
+        "buffalo": 8,
+        "goats_and_sheeps": 78,
+        "calves": 87,
+        "bullocks": 8,
+        "poultry_and_ducks": 78,
+        "livestock_shelter": [
+          "Pucca"
+        ],
+        "avg_daily_milk_prod_litres": 78,
+        "animal_waste_or_cow_dung_kgs": 787
+      },
+      "major_problems": {
+        "problems": [
+          "lknlknlkn",
+          "jkhbwjvhbd",
+          "qeuhdwkejfkj"
+        ],
+        "Suggestions_by_villagers": [
+          "knkjnkjnkjn",
+          "ksjbvsjhdvj",
+          "kjbwefkjbef"
+        ]
+      },
+      "volunteer_id": "admin-sehore",
+      "timestamp": "2023-08-22T13:01:46.133000"
     }
   ]
 }
