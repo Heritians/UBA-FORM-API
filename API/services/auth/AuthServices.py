@@ -11,6 +11,7 @@ from API.core.ConfigEnv import settings
 from API.core.Exceptions import *
 from API.models import UserOut, UserAuth, TokenPayload, BulkSignup
 from API.services.db.utils import DBQueries
+from API.utils import role_manager
 
 from .utils import Auth
 
@@ -44,15 +45,16 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
         response_result['message'] = [f'User with this AADHAR NO created successfully']
 
     else:
-        AADHAR_NOS=data.AADHAR_NOS
-        passwords=[Auth.get_password_hash(passwd) for passwd in data.passwords]
-        village_name=data.village_name
+        AADHAR_NOS = data.AADHAR_NOS
+        passwords = data.passwords
+        village_name = data.village_name
 
-        users=DBQueries.filtered_db_search("Auth","user",["_id","password","village_name"],AADHAR={"$in":AADHAR_NOS})
-        users=[user["AADHAR"] for user in users]
+        users = DBQueries.filtered_db_search("Auth", role_manager.user, ["_id","password","village_name"], search_idxs={"AADHAR":{"$in":AADHAR_NOS}})
+        users = [user["AADHAR"] for user in users]
 
-        invalid_users=[]
-        valid_users=[]
+        invalid_users = []
+        valid_users = []
+        users_created = []
 
         for user in zip(AADHAR_NOS,passwords):
             userinfo = {
@@ -63,18 +65,20 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
             if user[0] in users:
                 invalid_users.append(user[0])
             else:
-                userinfo["AADHAR"]=user[0]
-                userinfo["password"]=user[1]
+                userinfo["AADHAR"] = user[0]
+                userinfo["password"] = Auth.get_password_hash(user[1])
                 valid_users.append(userinfo) 
+                users_created.append(user[0])
 
         if len(valid_users)!=0:
-            DBQueries.insert_to_database("Auth", "user", valid_users)  # saving user to database
+            DBQueries.insert_to_database("Auth", role_manager.user, valid_users)  # saving user to database
             response_result['status'] = f'success'
             response_result['message'] = [f'Users created successfully']
         else:
             response_result['status'] = f'failure'
             response_result['message'] = [f'No users created']
-        response_result["message"].append(f"Users with these AADHAR NOs already exist: {invalid_users} hence aborting")          
+
+        response_result['data'] = {"invalid_users":invalid_users, "valid_users":users_created}       
 
 
 def user_login(tokens: TokenSchema, form_data: UserAuth):

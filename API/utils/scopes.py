@@ -28,6 +28,7 @@ from typing import Callable
 from API.models import UserOut
 from API.services.db import DBManipulation
 from API.core.Exceptions import *
+from .RoleManager import role_manager
 
 
 def init_checks(**kwargs) -> Callable:
@@ -37,7 +38,7 @@ def init_checks(**kwargs) -> Callable:
                 raise AuthorizationFailedException(kwargs['response_result'], "not authorized")
             if 'wrong_endpoint_roles' in kwargs.keys() and creds.role in kwargs['wrong_endpoint_roles']:
                 raise AuthorizationFailedException(kwargs['response_result'], "wrong endpoint")
-            if creds.role == 'GOVTOff' and "village_name" in kwargs and kwargs['village_name'] \
+            if creds.role == role_manager.GOVTOff and "village_name" in kwargs and kwargs['village_name'] \
                     not in DBManipulation.get_available_villages(kwargs["response_result"]):
                 raise VillageNotFoundException(kwargs['response_result'], "village not found in the DB")
             return specs(creds)

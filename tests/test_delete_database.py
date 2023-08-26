@@ -13,9 +13,9 @@ class MyDeleteDatabaseTest(unittest.TestCase):
         "role": f"{os.environ['ADMIN_ROLE']}"
         }
 
-    params={"dbname":"test_db"}
+    params={"dbname":"db_test"}
     DEL_VILLAGE_NAME=BASE_URL+"/ops/delete_database"
-    GET_VILLAGE_LIST=BASE_URL+"/ops/get_village_list"
+    GET_VILLAGE_LIST=BASE_URL+"/api/get_village_list"
     PUT_URL=BASE_URL+'/ops/update_village_list'
 
     def test_delete_database_user(self):

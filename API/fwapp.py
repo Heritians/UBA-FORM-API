@@ -4,7 +4,7 @@ from API import app
 from API.services.db import *
 from API.services.auth import *
 from API.services.auth.utils import JWTBearer
-from API.utils import scopes
+from API.utils import scopes, role_manager
 from API.core.ExceptionHandlers import *
 from API.core.Exceptions import *
 from API.models import (UserAuth, UserOut, UseRefreshToken,
@@ -83,18 +83,18 @@ def api_get_data(village_name: str, user_credentials: str = Depends(JWTBearer())
     }
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=["admin", "GOVTOff"], village_name=village_name,
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], village_name=village_name,
                         response_result=response_result)
     def scoped_checks(user_creds: UserOut):
-        if user_creds.role == 'admin':
-            response_data = fetch_from_db(response_result, user_creds.village_name)
+        if user_creds.role == role_manager.admin:
+            village_data = fetch_from_db(response_result, user_creds.village_name)
         else:
-            response_data = fetch_from_db(response_result, village_name)
-        return response_data['data']
+            village_data = fetch_from_db(response_result, village_name)
+        return village_data
 
-    response_data = scoped_checks(user_creds)
+    village_data = scoped_checks(user_creds)
 
-    response_result['data'] = response_data
+    response_result['data'] = village_data
     response_result['status'] = 'success'
     response_result['message'] = ['authorized']
 
@@ -112,7 +112,7 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], wrong_endpoint_roles=[role_manager.GOVTOff],
                         village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         pass
@@ -121,7 +121,7 @@ def api_get_familydata(respondents_id: str, user_credentials: str = Depends(JWTB
 
     familydata = fetch_familydata(response_result, user_creds.village_name, respondents_id)
 
-    response_result['data'] = familydata["data"]
+    response_result['data'] = familydata
     response_result['status'] = 'success'
     response_result['message'] = ['Authenticated']
     return response_result
@@ -138,7 +138,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'], wrong_endpoint_roles=['GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff], wrong_endpoint_roles=[role_manager.GOVTOff],
                         village_name=user_creds.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         pass
@@ -164,17 +164,17 @@ async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str =
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin', 'GOVTOff'],
+    @scopes.init_checks(authorized_roles=[role_manager.admin, role_manager.GOVTOff],
                         village_name=data.village_name, response_result=response_result)
     def scoped_checks(user_creds: UserOut):
         if isinstance(data, UserAuth):
-            if data.role not in ['admin', 'user']:
+            if data.role not in [role_manager.admin, role_manager.user]:
                 raise AuthorizationFailedException(response_result, "not authorized")
 
-            if data.role == 'admin' and user_creds.role == 'admin':
+            if data.role == role_manager.admin and user_creds.role == role_manager.admin:
                 raise AuthorizationFailedException(response_result, "not authorized")
 
-        if user_creds.role == "admin" and data.village_name != user_creds.village_name:
+        if user_creds.role == role_manager.admin and data.village_name != user_creds.village_name:
             raise AuthorizationFailedException(response_result, "not authorized")
 
     scoped_checks(user_creds)
@@ -185,7 +185,7 @@ async def auth_signup(data: Union[UserAuth, BulkSignup], user_credentials: str =
 
 @app.post('/auth/login', summary="Log-in to the user account", response_model=TokenSchema,
           tags=["Authorization Server"])
-async def auth_login(form_data: UserAuth = Depends()):
+async def auth_login(form_data: UserAuth):
     tokens = {
         "status": "Internal Server Error 500",
         "access_token": "",
@@ -202,22 +202,14 @@ async def auth_use_refresh_token(existing_tokens: UseRefreshToken):
     return handle_refresh_token_access(existing_tokens.refresh_access_token)
 
 
-@app.get("/ops/get_village_list", summary="Get the list of village names", response_model=FrontendResponseModel,
-         tags=["Sensitive ops"], dependencies=[Depends(JWTBearer())])
-async def get_village_list(user_credentials: str = Depends(JWTBearer())):
+@app.get("/api/get_village_list", summary="Get the list of village names", response_model=FrontendResponseModel,
+         tags=["Resource Server"])
+async def get_village_list():
     response_result = {
         "status": "not_allowed",
         "message": ["Not authenticated"],
         "data": {},
     }
-
-    user_creds = get_current_user_credentials(user_credentials)
-
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result)
-    def scoped_checks(user_creds: UserOut):
-        pass
-
-    scoped_checks(user_creds)
 
     village_list = get_available_villages(response_result)
     response_result['data']["village_names"] = village_list
@@ -236,7 +228,7 @@ async def ops_delete_database(dbname: str, user_credentials: str = Depends(JWTBe
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result, village_name=dbname)
+    @scopes.init_checks(authorized_roles=[role_manager.GOVTOff], response_result=response_result, village_name=dbname)
     def scoped_checks(user_creds):
         pass
 
@@ -257,7 +249,7 @@ async def ops_update_village_list(dbname: str, user_credentials: str = Depends(J
 
     user_creds = get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['GOVTOff'], response_result=response_result)
+    @scopes.init_checks(authorized_roles=[role_manager.GOVTOff], response_result=response_result)
     def scoped_checks(user_creds):
         pass
 
@@ -266,7 +258,7 @@ async def ops_update_village_list(dbname: str, user_credentials: str = Depends(J
     create_new_village(dbname, user_creds, response_result)
     return response_result
 
-@app.get('/api/get_respid_list', summary="Get the list of users", dependencies=[Depends(JWTBearer())], tags=["Resource Server"])
+@app.get('/api/get_respdata_list', summary="Get the list of users", dependencies=[Depends(JWTBearer())], tags=["Resource Server"])
 async def get_respid_list(date:str, village_name:str=None, user_credentials:str=Depends(JWTBearer())):
     response_result={
         "status":"not_allowed",
@@ -276,17 +268,17 @@ async def get_respid_list(date:str, village_name:str=None, user_credentials:str=
 
     user_creds=get_current_user_credentials(user_credentials)
 
-    @scopes.init_checks(authorized_roles=['admin','GOVTOff'],response_result=response_result,village_name=village_name)
+    @scopes.init_checks(authorized_roles=[role_manager.admin,role_manager.GOVTOff],response_result=response_result,village_name=village_name)
     def scoped_checks(user_creds:UserOut):
-        if user_creds.role == 'admin':
-            response_data = get_resp_id_on_date(user_creds.village_name,'meta',date,response_result)
+        if user_creds.role == role_manager.admin:
+            response_data = get_resp_data_on_date(user_creds.village_name, date,response_result)
         else:
-            response_data = get_resp_id_on_date(village_name,'meta',date,response_result)
+            response_data = get_resp_data_on_date(village_name, date,response_result)
         return response_data
 
     response_data = scoped_checks(user_creds)
 
-    response_result['data']['user_ids'] = response_data
+    response_result['data'] = response_data
     response_result['status'] = 'success'
     response_result['message'] = ['authorized']
 
