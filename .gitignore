@@ -12,3 +12,5 @@ __pycache__
 .vercel
 tempCodeRunnerFile.py
 .pytest_cache
+
+.venv
