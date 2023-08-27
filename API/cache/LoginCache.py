@@ -1,5 +1,5 @@
 '''
-LRU Cache implementation using Ordered dictionaries.
+This module contains LRU Cache implementation using Ordered dictionaries.
 
 Used hashmap for faster access and queue for mantaining the access order so that the Least Recently Used data can be evicted.
 
