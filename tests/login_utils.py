@@ -1,8 +1,8 @@
 import json
 
 import requests
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 BASE_URL = "https://ubaformapi-git-prod-fastapis-build.vercel.app" # for GitHub actions
 # BASE_URL = "http://127.0.0.1:8000" # for testing locally

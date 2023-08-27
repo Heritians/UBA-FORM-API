@@ -148,7 +148,7 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
 
     # indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
     indivdualdata = LRUcache.get(respondents_id)
-    
+
     if(indivdualdata==None):
         indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
         LRUcache.set(aadhaar_number=respondents_id, login_credentials=indivdualdata)
@@ -239,7 +239,7 @@ async def ops_delete_database(dbname: str, user_credentials: str = Depends(JWTBe
         pass
 
     scoped_checks(user_creds)
-
+    
     delete_village_data(dbname, response_result)
     return response_result
 
