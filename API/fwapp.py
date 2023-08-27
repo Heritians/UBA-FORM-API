@@ -9,6 +9,7 @@ from API.core.ExceptionHandlers import *
 from API.core.Exceptions import *
 from API.models import (UserAuth, UserOut, UseRefreshToken,
                         BulkSignup, FormData, TokenSchema, FrontendResponseModel)
+from API.cache.LoginCache import LRUcache
 
 from fastapi import Depends, Request
 from fastapi.templating import Jinja2Templates
@@ -145,8 +146,13 @@ def api_get_individual_data(respondents_id: str, user_credentials: str = Depends
 
     scoped_checks(user_creds)
 
-    indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
-
+    # indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
+    indivdualdata = LRUcache.get(respondents_id)
+    
+    if(indivdualdata==None):
+        indivdualdata = fetch_individualdata(response_result, user_creds.village_name, respondents_id)
+        LRUcache.set(aadhaar_number=respondents_id, login_credentials=indivdualdata)
+    
     response_result['data'] = indivdualdata
     response_result['status'] = 'success'
     response_result['message'] = ['Authenticated']
