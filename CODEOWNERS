@@ -20,3 +20,6 @@
 # landing page
 /API/static/* @HemanthSai7
 /API/templates/* @HemanthSai7
+
+# LRU cache implementation
+/API/cache/LoginCache.py @AdrijeGuha

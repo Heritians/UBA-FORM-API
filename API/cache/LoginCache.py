@@ -10,15 +10,15 @@ The cache code uses:
 
 '''
 
-import collections
+from collections import OrderedDict
 import threading
 
 class LoginCache:
     def __init__(self):
         """
-        Creates a new user cache.
+        Creates a new user cache using an ordered dictionary
         """
-        self.cache = collections.OrderedDict()
+        self.cache = OrderedDict()
         self.lock = threading.RLock()
 
     def get(self, aadhaar_number):
