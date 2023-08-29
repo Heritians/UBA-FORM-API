@@ -14,6 +14,7 @@ from API.services.db.utils import DBQueries
 from API.utils import role_manager
 
 from .utils import Auth
+import cacheStorage
 
 
 def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSignup]):
@@ -41,6 +42,10 @@ def signup(response_result: FrontendResponseModel, data: Union[UserAuth,BulkSign
             'village_name': data.village_name,
         }
         DBQueries.insert_to_database("Auth", data.role, userinfo)  # saving user to database
+
+        user_cache = cacheStorage.UserCache(100)
+        user_cache.register_user('user1', data.role, data.AADHAR_NO, data.password, data.village_name) #implement LRU caching
+
         response_result['status'] = f'success'
         response_result['message'] = [f'User with this AADHAR NO created successfully']
 
